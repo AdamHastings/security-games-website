@@ -15,6 +15,12 @@ $command = "$elf_file $config $logname";
 
 exec($command);
 
+// create the plotly figures
+$script_command = "python asset_flow_sankey.py $logname";
+exec($script_command);
+$sankey_filename = "figs/" . $timestamp . "_asset_flow_sankey.html";
+chmod($sankey_filename, 0644);
+
 unlink($logname);
 
 ?> 
