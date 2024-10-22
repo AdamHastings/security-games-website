@@ -16,11 +16,27 @@ $command = "$elf_file $config $logname";
 exec($command);
 
 // create the plotly figures
-$script_command = "python asset_flow_sankey.py $logname";
+$script_command = "./asset_flow_sankey.py $logname";
 exec($script_command);
 $sankey_filename = "figs/" . $timestamp . "_asset_flow_sankey.html";
-chmod($sankey_filename, 0644);
+// chmod($sankey_filename, 0644);
+
+$sankey_filename = "figs/server_config_asset_flow_sankey.html";
+
+echo $timestamp."<br>\n";
+echo $command."<br>\n";
+echo $sankey_filename."<br>\n";
+
+// Check if the file exists
+if (file_exists($sankey_filename)) {
+    // Read and return the contents of the HTML file
+    echo file_get_contents($sankey_filename);
+} else {
+    // Handle the case where the file doesn't exist
+    echo "<h1>Error: The requested HTML file does not exist.</h1>";
+}
 
 unlink($logname);
+unlink($sankey_filename);
 
 ?> 

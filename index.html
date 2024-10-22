@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Load Generated HTML in iframe</title>
+</head>
+<body>
+    <h1>Original HTML Page</h1>
+    <button onclick="document.getElementById('iframe-generated').src='process_input.php'">Load Generated HTML</button>
+
+    <!-- The iframe will display the generated HTML -->
+    <iframe id="iframe-generated" style="width:100%; height:400px;"></iframe>
+</body>
+</html>
