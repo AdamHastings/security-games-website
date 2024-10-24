@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Input Form</title>
+    <script>
+        function updateFields(distribution, idPrefix) {
+            const fixedFields = document.getElementById(idPrefix + 'fixedFields');
+            const normalFields = document.getElementById(idPrefix + 'normalFields');
+            const lognormalFields = document.getElementById(idPrefix + 'lognormalFields');
+            const truncatedFields = document.getElementById(idPrefix + 'truncatedFields');
+
+            fixedFields.style.display = 'none';
+            normalFields.style.display = 'none';
+            lognormalFields.style.display = 'none';
+            truncatedFields.style.display = 'none';
+
+            if (distribution === 'fixed') {
+                fixedFields.style.display = 'block';
+            } else if (distribution === 'normal') {
+                normalFields.style.display = 'block';
+            } else if (distribution === 'lognormal') {
+                lognormalFields.style.display = 'block';
+            } else if (distribution === 'truncated_normal') {
+                truncatedFields.style.display = 'block';
+            }
+        }
+
+        function saveData() {
+            const jsonData = {
+                INEQUALITY: getFieldData('inequality'),
+                RANSOM_B0: getFieldData('ransomB0'),
+                // Add more fields here similarly...
+                // verbose: true,
+                // assertions_on: true,
+                // NUM_GAMES: 100
+            };
+            
+            // Send data to the server using fetch (AJAX)
+            fetch('save_data.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('Data saved successfully');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to save data');
+            });
+        }
+
+        function getFieldData(idPrefix) {
+            console.log("idPrefix = ", idPrefix);
+            const distribution = document.getElementById(idPrefix + 'Distribution').value;
+            let data = { distribution: distribution };
+
+            if (distribution === 'fixed') {
+                data.val = parseFloat(document.getElementById(idPrefix + 'Val').value);
+            } else if (distribution === 'normal' || distribution === 'lognormal') {
+                data.mean = parseFloat(document.getElementById(idPrefix + 'Mean').value);
+                data.stddev = parseFloat(document.getElementById(idPrefix + 'Stddev').value);
+            } else if (distribution === 'truncated_normal') {
+                data.mean = parseFloat(document.getElementById(idPrefix + 'Mean').value);
+                data.stddev = parseFloat(document.getElementById(idPrefix + 'Stddev').value);
+                data.min = parseFloat(document.getElementById(idPrefix + 'Min').value);
+                data.max = parseFloat(document.getElementById(idPrefix + 'Max').value);
+            }
+
+            return data;
+        }
+    </script>
+</head>
+<body>
+
+    <form onsubmit="event.preventDefault(); saveData();">
+
+        <h3>INEQUALITY</h3>
+        <label for="inequalityDistribution">Distribution:</label>
+        <select id="inequalityDistribution" onchange="updateFields(this.value, 'inequality')">
+            <option value="fixed">Fixed</option>
+            <option value="normal">Normal</option>
+            <option value="lognormal">LogNormal</option>
+            <option value="truncated_normal">Truncated Normal</option>
+        </select>
+
+        <div id="inequalityfixedFields">
+            <label for="inequalityVal">Value:</label>
+            <input type="number" id="inequalityVal" value="0.001", min="0", max="1", step="0.0001">
+        </div>
+
+        <div id="inequalitynormalFields" style="display:none;">
+            <label for="inequalityMean">Mean:</label>
+            <input type="number" id="inequalityMean">
+            <label for="inequalityStddev">Std Dev:</label>
+            <input type="number" id="inequalityStddev">
+        </div>
+
+        <div id="inequalitylognormalFields" style="display:none;">
+            <label for="inequalityMean">Mean:</label>
+            <input type="number" id="inequalityMean">
+            <label for="inequalityStddev">Std Dev:</label>
+            <input type="number" id="inequalityStddev">
+        </div>
+
+        <div id="inequalitytruncatedFields" style="display:none;">
+            <label for="inequalityMean">Mean:</label>
+            <input type="number" id="inequalityMean">
+            <label for="inequalityStddev">Std Dev:</label>
+            <input type="number" id="inequalityStddev">
+            <label for="inequalityMin">Min:</label>
+            <input type="number" id="inequalityMin">
+            <label for="inequalityMax">Max:</label>
+            <input type="number" id="inequalityMax">
+        </div>
+
+        <h3>RANSOM_B0</h3>
+        <label for="ransomB0Distribution">Distribution:</label>
+        <select id="ransomB0Distribution" onchange="updateFields(this.value, 'ransomB0')">
+            <option value="fixed">Fixed</option>
+            <option value="normal">Normal</option>
+            <option value="lognormal">LogNormal</option>
+            <option value="truncated_normal">Truncated Normal</option>
+        </select>
+
+        <div id="ransomB0fixedFields">
+            <label for="ransomB0Val">Value:</label>
+            <input type="number" id="ransomB0Val">
+        </div>
+
+        <div id="ransomB0normalFields" style="display:none;">
+            <label for="ransomB0Mean">Mean:</label>
+            <input type="number" id="ransomB0Mean">
+            <label for="ransomB0Stddev">Std Dev:</label>
+            <input type="number" id="ransomB0Stddev">
+        </div>
+
+        <div id="ransomB0lognormalFields" style="display:none;">
+            <label for="ransomB0Mean">Mean:</label>
+            <input type="number" id="ransomB0Mean">
+            <label for="ransomB0Stddev">Std Dev:</label>
+            <input type="number" id="ransomB0Stddev">
+        </div>
+
+        <div id="ransomB0truncatedFields" style="display:none;">
+            <label for="ransomB0Mean">Mean:</label>
+            <input type="number" id="ransomB0Mean">
+            <label for="ransomB0Stddev">Std Dev:</label>
+            <input type="number" id="ransomB0Stddev">
+            <label for="ransomB0Min">Min:</label>
+            <input type="number" id="ransomB0Min">
+            <label for="ransomB0Max">Max:</label>
+            <input type="number" id="ransomB0Max">
+        </div>
+
+        <!-- Repeat similar fields for other parameters like RANSOM_B0, WEALTH, POSTURE, etc. -->
+
+        <button type="submit">Save</button>
+
+    </form>
+
+</body>
+</html>
