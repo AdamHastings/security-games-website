@@ -7,13 +7,25 @@ $microtime = microtime(true);  // Returns float with microseconds precision
 $timestamp = sprintf('%.6f', $microtime);
 
 // The ELF file or command you want to run
-$elf_file = 'run/release/run_games';
-$config = 'configs/server_config.json'; // replace later with custom config scraped from html form
-$logname = "logs/$timestamp.csv";
+$elf_file = './run/release/run_games';
+$config = 'server_config.json'; // replace later with custom config scraped from html form
+$logname = "$timestamp.csv";
 
 $command = "$elf_file $config $logname";
 
-exec($command);
+echo $timestamp."<br>\n";
+echo $command."<br>\n";
+
+// Execute the command using exec()
+$return_var = null;
+system($command, $return_var);
+
+// Check the result
+if ($return_var === 0) {
+    echo "Command executed successfully.<br>";
+} else {
+    echo "Error executing the command. Return code: " . $return_var."<br>\n";
+}
 
 // create the plotly figures
 $script_command = "./asset_flow_sankey.py $logname";
@@ -21,10 +33,10 @@ exec($script_command);
 $sankey_filename = "figs/" . $timestamp . "_asset_flow_sankey.html";
 // chmod($sankey_filename, 0644);
 
+// TODO remove
 $sankey_filename = "figs/server_config_asset_flow_sankey.html";
 
-echo $timestamp."<br>\n";
-echo $command."<br>\n";
+
 echo $sankey_filename."<br>\n";
 
 // Check if the file exists
@@ -36,7 +48,7 @@ if (file_exists($sankey_filename)) {
     echo "<h1>Error: The requested HTML file does not exist.</h1>";
 }
 
-unlink($logname);
-unlink($sankey_filename);
+// unlink($logname);
+// unlink($sankey_filename);
 
 ?> 
