@@ -1,169 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Input Form</title>
+    <title>Dynamic Data Input Form with Distribution Types</title>
+</head>
+<body>
+    <form id="dataForm"></form>
+    <button type="submit" id="submitBtn">Submit</button>
+
+
     <script>
-        function updateFields(distribution, idPrefix) {
-            const fixedFields = document.getElementById(idPrefix + 'fixedFields');
-            const normalFields = document.getElementById(idPrefix + 'normalFields');
-            const lognormalFields = document.getElementById(idPrefix + 'lognormalFields');
-            const truncatedFields = document.getElementById(idPrefix + 'truncatedFields');
+        const formFields = [
+            { id: "INEQUALITY", label: "Inequality", distribution: "fixed", default: 0.001 },
+            { id: "WEALTH", label: "Wealth", distribution: "lognormal", mean: 1.1356082157016467, stddev: 1.1184432636889245 },
+            { id: "POSTURE", label: "Posture", distribution: "truncated_normal", mean: 0.28, stddev: 0.10, min: 0.0, max: 1.0 },
+            { id: "RANSOM_B0", label: "Ransom B0", distribution: "fixed", default: 792145 },
+            { id: "RANSOM_B1", label: "Ransom B1", distribution: "fixed", default: 0.00121 },
+            { id: "RECOVERY_COST_BASE", label: "Recovery Cost Base", distribution: "fixed", default: 230123 },
+            { id: "RECOVERY_COST_EXP", label: "Recovery Cost Exp", distribution: "fixed", default: 0.125 },
+            { id: "NUM_QUOTES", label: "Number of Quotes", distribution: "fixed", default: 10 }
+        ];
 
-            fixedFields.style.display = 'none';
-            normalFields.style.display = 'none';
-            lognormalFields.style.display = 'none';
-            truncatedFields.style.display = 'none';
+        // Define the fields needed for each distribution type
+        const distributionFields = {
+            fixed: ['val'],
+            normal: ['mean', 'stddev'],
+            lognormal: ['mean', 'stddev'],
+            truncated_normal: ['mean', 'stddev', 'min', 'max'],
+            uniform : ['min', 'max']
+        };
 
-            if (distribution === 'fixed') {
-                fixedFields.style.display = 'block';
-            } else if (distribution === 'normal') {
-                normalFields.style.display = 'block';
-            } else if (distribution === 'lognormal') {
-                lognormalFields.style.display = 'block';
-            } else if (distribution === 'truncated_normal') {
-                truncatedFields.style.display = 'block';
-            }
-        }
+        const form = document.getElementById("dataForm");
 
-        function saveData() {
-            const jsonData = {
-                INEQUALITY: getFieldData('inequality'),
-                RANSOM_B0: getFieldData('ransomB0'),
-                // Add more fields here similarly...
-                // verbose: true,
-                // assertions_on: true,
-                // NUM_GAMES: 100
-            };
+        formFields.forEach(field => {
+            const fieldWrapper = document.createElement("div");
+            fieldWrapper.id = `wrapper-${field.id}`;
+            form.appendChild(fieldWrapper);
+
+             // Add a static header with the field's id name, only once
+            const heading = document.createElement("h4");
+            heading.textContent = `${field.id}`;
+            fieldWrapper.appendChild(heading);
+
+            const label = document.createElement("label");
+            label.for = field.id;
+            label.textContent = `${field.label} (${field.distribution}): `;
+            fieldWrapper.appendChild(label);
+
+            const select = document.createElement("select");
+            select.id = `${field.id}-distribution`;
+            select.name = `${field.id}-distribution`;
+            ["fixed", "normal", "lognormal", "truncated_normal", "uniform"].forEach(dist => {
+                const option = document.createElement("option");
+                option.value = dist;
+                option.textContent = dist;
+                option.selected = dist === field.distribution;
+                select.appendChild(option);
+            });
+            fieldWrapper.appendChild(select);
+
+            // Create fields based on the default distribution type
+            createDistributionFields(field.id, field.distribution, field);
+            console.log(field.id);
+
+            // Update fields dynamically based on selected distribution
+            select.addEventListener("change", function () {
+                const selectedDist = select.value;
+                createDistributionFields(field.id, selectedDist, field);
+            });
+        });
+
+        function createDistributionFields(fieldId, distribution, field) {
+            const fieldWrapper = document.getElementById(`wrapper-${fieldId}`);
             
-            // Send data to the server using fetch (AJAX)
-            fetch('save_data.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(jsonData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                alert('Data saved successfully');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to save data');
+            // Remove any existing input fields for this parameter
+            const existingFields = fieldWrapper.querySelectorAll("input:not([name$='-distribution']), label:not([for$='-distribution']), br");
+            existingFields.forEach(el => el.remove());
+
+
+            // Ensure the distribution type is defined in the dictionary
+            const fieldsToAdd = distributionFields[distribution];
+            if (!fieldsToAdd) {
+                console.error(`Distribution type "${distribution}" is not defined in distributionFields.`);
+                return;
+            }
+
+            // Add new fields based on the selected distribution type
+            fieldsToAdd.forEach((param, index) => {
+                const input = document.createElement("input");
+                input.type = "number";
+                input.name = `${fieldId}-${param}`;
+                input.id = `${fieldId}-${param}-${index}`; // Make id unique by adding the index
+
+                input.value = field[param] || 0;
+
+                const paramLabel = document.createElement("label");
+                paramLabel.for = input.id;  // Set 'for' attribute to match the unique id
+                paramLabel.textContent = ` ${param}: `;
+                
+                fieldWrapper.appendChild(paramLabel);
+                fieldWrapper.appendChild(input);
+                // fieldWrapper.appendChild(document.createElement("br"));
             });
         }
 
-        function getFieldData(idPrefix) {
-            console.log("idPrefix = ", idPrefix);
-            const distribution = document.getElementById(idPrefix + 'Distribution').value;
-            let data = { distribution: distribution };
+        // Collect form data and submit
+        document.getElementById("submitBtn").addEventListener("click", function (e) {
+            e.preventDefault();
+            const formData = {};
+            formFields.forEach(field => {
+                const distribution = document.getElementById(`${field.id}-distribution`).value;
+                formData[field.id] = { distribution };
+                distributionFields[distribution].forEach(param => {
+                    formData[field.id][param] = parseFloat(document.getElementById(`${field.id}-${param}`).value);
+                });
+            });
 
-            if (distribution === 'fixed') {
-                data.val = parseFloat(document.getElementById(idPrefix + 'Val').value);
-            } else if (distribution === 'normal' || distribution === 'lognormal') {
-                data.mean = parseFloat(document.getElementById(idPrefix + 'Mean').value);
-                data.stddev = parseFloat(document.getElementById(idPrefix + 'Stddev').value);
-            } else if (distribution === 'truncated_normal') {
-                data.mean = parseFloat(document.getElementById(idPrefix + 'Mean').value);
-                data.stddev = parseFloat(document.getElementById(idPrefix + 'Stddev').value);
-                data.min = parseFloat(document.getElementById(idPrefix + 'Min').value);
-                data.max = parseFloat(document.getElementById(idPrefix + 'Max').value);
-            }
-
-            return data;
-        }
+            fetch('process.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(result => {
+                const plotData = result.plotData;
+                Plotly.newPlot('plotly-div', plotData);
+            })
+            .catch(error => console.error('Error:', error));
+        });
     </script>
-</head>
-<body>
-
-    <form onsubmit="event.preventDefault(); saveData();">
-
-        <h3>INEQUALITY</h3>
-        <label for="inequalityDistribution">Distribution:</label>
-        <select id="inequalityDistribution" onchange="updateFields(this.value, 'inequality')">
-            <option value="fixed">Fixed</option>
-            <option value="normal">Normal</option>
-            <option value="lognormal">LogNormal</option>
-            <option value="truncated_normal">Truncated Normal</option>
-        </select>
-
-        <div id="inequalityfixedFields">
-            <label for="inequalityVal">Value:</label>
-            <input type="number" id="inequalityVal" value="0.001", min="0", max="1", step="0.0001">
-        </div>
-
-        <div id="inequalitynormalFields" style="display:none;">
-            <label for="inequalityMean">Mean:</label>
-            <input type="number" id="inequalityMean">
-            <label for="inequalityStddev">Std Dev:</label>
-            <input type="number" id="inequalityStddev">
-        </div>
-
-        <div id="inequalitylognormalFields" style="display:none;">
-            <label for="inequalityMean">Mean:</label>
-            <input type="number" id="inequalityMean">
-            <label for="inequalityStddev">Std Dev:</label>
-            <input type="number" id="inequalityStddev">
-        </div>
-
-        <div id="inequalitytruncatedFields" style="display:none;">
-            <label for="inequalityMean">Mean:</label>
-            <input type="number" id="inequalityMean">
-            <label for="inequalityStddev">Std Dev:</label>
-            <input type="number" id="inequalityStddev">
-            <label for="inequalityMin">Min:</label>
-            <input type="number" id="inequalityMin">
-            <label for="inequalityMax">Max:</label>
-            <input type="number" id="inequalityMax">
-        </div>
-
-        <h3>RANSOM_B0</h3>
-        <label for="ransomB0Distribution">Distribution:</label>
-        <select id="ransomB0Distribution" onchange="updateFields(this.value, 'ransomB0')">
-            <option value="fixed">Fixed</option>
-            <option value="normal">Normal</option>
-            <option value="lognormal">LogNormal</option>
-            <option value="truncated_normal">Truncated Normal</option>
-        </select>
-
-        <div id="ransomB0fixedFields">
-            <label for="ransomB0Val">Value:</label>
-            <input type="number" id="ransomB0Val">
-        </div>
-
-        <div id="ransomB0normalFields" style="display:none;">
-            <label for="ransomB0Mean">Mean:</label>
-            <input type="number" id="ransomB0Mean">
-            <label for="ransomB0Stddev">Std Dev:</label>
-            <input type="number" id="ransomB0Stddev">
-        </div>
-
-        <div id="ransomB0lognormalFields" style="display:none;">
-            <label for="ransomB0Mean">Mean:</label>
-            <input type="number" id="ransomB0Mean">
-            <label for="ransomB0Stddev">Std Dev:</label>
-            <input type="number" id="ransomB0Stddev">
-        </div>
-
-        <div id="ransomB0truncatedFields" style="display:none;">
-            <label for="ransomB0Mean">Mean:</label>
-            <input type="number" id="ransomB0Mean">
-            <label for="ransomB0Stddev">Std Dev:</label>
-            <input type="number" id="ransomB0Stddev">
-            <label for="ransomB0Min">Min:</label>
-            <input type="number" id="ransomB0Min">
-            <label for="ransomB0Max">Max:</label>
-            <input type="number" id="ransomB0Max">
-        </div>
-
-        <!-- Repeat similar fields for other parameters like RANSOM_B0, WEALTH, POSTURE, etc. -->
-
-        <button type="submit">Save</button>
-
-    </form>
-
 </body>
 </html>
