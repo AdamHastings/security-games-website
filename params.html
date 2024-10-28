@@ -9,99 +9,166 @@
 
 
     <script>
-        const formFields = [
-            { id: "INEQUALITY", label: "Inequality", distribution: "fixed", default: 0.001 },
-            { id: "WEALTH", label: "Wealth", distribution: "lognormal", mean: 1.1356082157016467, stddev: 1.1184432636889245 },
-            { id: "POSTURE", label: "Posture", distribution: "truncated_normal", mean: 0.28, stddev: 0.10, min: 0.0, max: 1.0 },
-            { id: "RANSOM_B0", label: "Ransom B0", distribution: "fixed", default: 792145 },
-            { id: "RANSOM_B1", label: "Ransom B1", distribution: "fixed", default: 0.00121 },
-            { id: "RECOVERY_COST_BASE", label: "Recovery Cost Base", distribution: "fixed", default: 230123 },
-            { id: "RECOVERY_COST_EXP", label: "Recovery Cost Exp", distribution: "fixed", default: 0.125 },
-            { id: "NUM_QUOTES", label: "Number of Quotes", distribution: "fixed", default: 10 }
-        ];
+        // const formFields = [
+        //     { id: "INEQUALITY", label: "Inequality", distribution: "fixed", val: 0.001, min: 0, max: 1, step: 0.0001 },
+        //     { id: "RANSOM_B0", label: "Ransom B0", distribution: "fixed", val: 792145 },
+        //     { id: "RANSOM_B1", label: "Ransom B1", distribution: "fixed", val: 0.00121 },
+        //     { id: "RECOVERY_COST_BASE", label: "Recovery Cost Base", distribution: "fixed", val: 230123 },
+        //     { id: "RECOVERY_COST_EXP", label: "Recovery Cost Exp", distribution: "fixed", val: 0.125 },
+        //     { id: "WEALTH", label: "Wealth", distribution: "lognormal", mean: 1.1356082157016467, stddev: 1.1184432636889245 },
+        //     { id: "POSTURE", label: "Posture", distribution: "truncated_normal", mean: 0.28, stddev: 0.10, min: 0.0, max: 1.0 },
+        //     { id: "NUM_QUOTES", label: "Number of Quotes", distribution: "fixed", val: 10 }
+        // ];
+        const formFields = {
+            "INEQUALITY" : {
+                label: "INEQUALITY",
+                default: {
+                    distribution : "fixed",
+                    val : 0.001
+                },
+                constraints: {
+                    min: 0,
+                    max: 1,
+                    step: 0.0001
+                }
+            }
+            
+        }
 
         // Define the fields needed for each distribution type
         const distributionFields = {
             fixed: ['val'],
-            normal: ['mean', 'stddev'],
+            // normal: ['mean', 'stddev'],
             lognormal: ['mean', 'stddev'],
             truncated_normal: ['mean', 'stddev', 'min', 'max'],
             uniform : ['min', 'max']
+
         };
 
+        // Define the fields needed for each distribution type dynamically based on formFields
         const form = document.getElementById("dataForm");
 
-        formFields.forEach(field => {
+        Object.keys(formFields).forEach(fieldId => {
+            const field = formFields[fieldId];
             const fieldWrapper = document.createElement("div");
-            fieldWrapper.id = `wrapper-${field.id}`;
+            fieldWrapper.id = `wrapper-${fieldId}`;
             form.appendChild(fieldWrapper);
 
-             // Add a static header with the field's id name, only once
+            // Add a static header with the field's id name, only once
             const heading = document.createElement("h4");
-            heading.textContent = `${field.id}`;
+            heading.textContent = `${fieldId}`;
             fieldWrapper.appendChild(heading);
 
+            // Create and add the distribution dropdown
             const label = document.createElement("label");
-            label.for = field.id;
-            label.textContent = `${field.label} (${field.distribution}): `;
+            label.for = `${fieldId}-distribution`;
+            label.textContent = `Distribution: `;
             fieldWrapper.appendChild(label);
 
             const select = document.createElement("select");
-            select.id = `${field.id}-distribution`;
-            select.name = `${field.id}-distribution`;
-            ["fixed", "normal", "lognormal", "truncated_normal", "uniform"].forEach(dist => {
+            select.id = `${fieldId}-distribution`;
+            select.name = `${fieldId}-distribution`;
+
+            // Create options for the dropdown based on available distributions
+            ["fixed", "lognormal", "truncated_normal", "uniform"].forEach(dist => {
                 const option = document.createElement("option");
                 option.value = dist;
                 option.textContent = dist;
-                option.selected = dist === field.distribution;
+                option.selected = dist === field.default.distribution; // Set selected value from default
                 select.appendChild(option);
             });
             fieldWrapper.appendChild(select);
 
+            // Create a container for dynamic fields below the dropdown
+            const dynamicFieldsContainer = document.createElement("div");
+            dynamicFieldsContainer.id = `dynamic-${fieldId}`;
+            fieldWrapper.appendChild(dynamicFieldsContainer);
+
             // Create fields based on the default distribution type
-            createDistributionFields(field.id, field.distribution, field);
-            console.log(field.id);
+            createDistributionFields(fieldId, field.default.distribution, field.default, dynamicFieldsContainer);
 
             // Update fields dynamically based on selected distribution
             select.addEventListener("change", function () {
                 const selectedDist = select.value;
-                createDistributionFields(field.id, selectedDist, field);
+                createDistributionFields(fieldId, selectedDist, field.default, dynamicFieldsContainer);
             });
         });
 
-        function createDistributionFields(fieldId, distribution, field) {
-            const fieldWrapper = document.getElementById(`wrapper-${fieldId}`);
+        // Modify the createDistributionFields function to accept dynamicFieldsContainer as a parameter
+        function createDistributionFields(fieldId, distribution, defaults, dynamicFieldsContainer) {
+            dynamicFieldsContainer.innerHTML = ""; // Clear previous inputs
+
+            // Create input fields based on the selected distribution type
+            const fieldsToCreate = distributionFields[distribution] || [];
+
+            const universalConstraints = formFields[fieldId].constraints;
             
-            // Remove any existing input fields for this parameter
-            const existingFields = fieldWrapper.querySelectorAll("input:not([name$='-distribution']), label:not([for$='-distribution']), br");
-            existingFields.forEach(el => el.remove());
-
-
-            // Ensure the distribution type is defined in the dictionary
-            const fieldsToAdd = distributionFields[distribution];
-            if (!fieldsToAdd) {
-                console.error(`Distribution type "${distribution}" is not defined in distributionFields.`);
-                return;
-            }
-
-            // Add new fields based on the selected distribution type
-            fieldsToAdd.forEach((param, index) => {
+            fieldsToCreate.forEach(param => {
                 const input = document.createElement("input");
                 input.type = "number";
                 input.name = `${fieldId}-${param}`;
-                input.id = `${fieldId}-${param}-${index}`; // Make id unique by adding the index
+                input.id = `${fieldId}-${param}`;
+                input.value = defaults[param] || ''; // Set default value or empty
 
-                input.value = field[param] || 0;
+                // const tooltip = document.createElement("span");
+                // tooltip.className = "tooltip";
+                // tooltip.style.visibility = "hidden";
+                // tooltip.style.color = "red";
 
+                // Create a tooltip element
+                const tooltip = document.createElement("span");
+                tooltip.className = "tooltip";
+                tooltip.style.display = "none"; // Initially hide tooltip
+                tooltip.style.visibility = "hidden";
+                tooltip.style.color = "red";
+                dynamicFieldsContainer.appendChild(tooltip);
+
+                // Apply constraints if they exist
+                if (universalConstraints) {
+                    const { min, max, step } = universalConstraints;
+                    if (min !== undefined) input.min = min;
+                    if (max !== undefined) input.max = max;
+                    if (step !== undefined) input.step = step;
+
+                    // Enforce constraints in real-time
+                    input.addEventListener("input", function () {
+                        const value = parseFloat(input.value);
+                        console.log(value);
+                        if (!isNaN(value)) {
+                            // If input value violates min/max, show tooltip and reset
+                            console.log(min);
+                            console.log(max);
+                            if (value < min || value > max) {
+                                console.log("showing tooltip");
+                                tooltip.textContent = `Value must be between ${min} and ${max}.`;
+                                tooltip.style.visibility = "visible";
+                            } else {
+                                tooltip.style.visibility = "hidden";
+                            }
+                        }
+                    });
+
+                    // Automatically adjust out-of-range values on blur
+                    input.addEventListener("change", function () {
+                        const value = parseFloat(input.value);
+                        if (!isNaN(value)) {
+                            input.value = Math.max(min, Math.min(value, max));
+                            tooltip.style.visibility = "hidden";
+                        }
+                    });
+                }
                 const paramLabel = document.createElement("label");
-                paramLabel.for = input.id;  // Set 'for' attribute to match the unique id
+                paramLabel.for = input.id;
                 paramLabel.textContent = ` ${param}: `;
-                
-                fieldWrapper.appendChild(paramLabel);
-                fieldWrapper.appendChild(input);
-                // fieldWrapper.appendChild(document.createElement("br"));
+
+                dynamicFieldsContainer.appendChild(paramLabel);
+                dynamicFieldsContainer.appendChild(input);
+                dynamicFieldsContainer.appendChild(document.createElement("br"));
             });
         }
+
+
+
 
         // Collect form data and submit
         document.getElementById("submitBtn").addEventListener("click", function (e) {
