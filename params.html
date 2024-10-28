@@ -134,88 +134,178 @@
                     const { min, max, step } = universalConstraints;
                     if (min !== undefined) input.min = min;
                     if (max !== undefined) input.max = max;
-                    if (step !== undefined) input.step = step;
+                    if (step !== undefined) input.step = step;                    
 
-                    
+                    // TODO add tighter min/max bounds for min max boxes?
 
-                    // console.log(fieldId);
+                    input.addEventListener("click", function () {
+                        console.log("click");
 
-                    // Enforce constraints in real-time
-                    input.addEventListener("input", function () {
-                        const value = parseFloat(input.value);
-
-                        const dropdown = document.getElementById(`${fieldId}-distribution`);
-                        const selectedValue = dropdown.options[dropdown.selectedIndex].value;
-
-
-
-                        // if (ret = document.getElementById(`${fieldId}-min`));
-                        // const valMax = parseFloat(document.getElementById(`${fieldId}-max`).value);
                         const minBox = document.getElementById(`${fieldId}-min`);
                         const maxBox = document.getElementById(`${fieldId}-max`);
                         const valMin = minBox ? parseFloat(minBox.value) : undefined;
                         const valMax = maxBox ? parseFloat(maxBox.value) : undefined;
 
                         if (param == "min") {
-                            input.max = (valMax - parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                            maxBox.min = (parseFloat(input.value) + parseFloat(input.step)).toFixed(input.step.toString().length - 2);
                         } else if (param == "max") {
-                            input.min = (valMin +  parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                            minBox.max = (parseFloat(input.value) - parseFloat(input.step)).toFixed(input.step.toString().length - 2);
                         }
+                        console.log("minBox bounds: ", minBox.min, minBox.max);
+                        console.log("maxBox bounds: ", maxBox.min, maxBox.max);
 
-
-                        // console.log("Selected value:", selectedValue);
-                        // console.log(`${fieldId}-min`);
-                        console.log(valMin, valMax);
-
-                        if (!isNaN(value)) {
-                            // If input value violates min/max, show tooltip and reset
-                            if (value < min || value > max) {
-                                tooltip.textContent = `Value must be between ${min} and ${max}.`;
-                                tooltip.style.visibility = "visible"; // Show the tooltip
-                            }
-                            else if ( valMin != undefined && valMax != undefined  && valMin >= valMax ) {
-                                console.log("min max violation");
-                                tooltip.textContent = `min must be greater than max`;
-                                tooltip.style.visibility = "visible"; // Show the tooltip
-                            }
-                            // else if ( (selectedValue == "uniform" || selectedValue == "truncated_normal")) {
-                            //     // console.log(param, value);
-                            //     // console.log()
-                            //     console.log("match");
-                            // } 
-                            else {
-                                tooltip.style.visibility = "hidden"; // Hide the tooltip
-                            }
-                        }
                     });
 
-                    // Automatically adjust out-of-range values on blur
-                    input.addEventListener("blur", function () {
-                        const value = parseFloat(input.value);
-
-                        const dropdown = document.getElementById(`${fieldId}-distribution`);
-                        const selectedValue = dropdown.options[dropdown.selectedIndex].value;
+                    input.addEventListener("input", function () {
+                        console.log("input");
 
                         const minBox = document.getElementById(`${fieldId}-min`);
                         const maxBox = document.getElementById(`${fieldId}-max`);
                         const valMin = minBox ? parseFloat(minBox.value) : undefined;
                         const valMax = maxBox ? parseFloat(maxBox.value) : undefined;
 
-                        if (!isNaN(value)) {
-                            
-                            if (value < min || value > max) {
-                                input.value = Math.max(min, Math.min(value, max));
-                            }
-                            else if ( valMin != undefined && valMax != undefined  && valMin >= valMax ) {
-                                if (param == "min") {
-                                    input.value = (valMax - parseFloat(input.step)).toFixed(input.step.toString().length - 2);
-                                } else if (param == "max") {
-                                    input.value = (valMin +  parseFloat(input.step)).toFixed(input.step.toString().length - 2);
-                                }
-                            }
-                            tooltip.style.visibility = "hidden"; // Hide tooltip if corrected
+                        if ( valMin != undefined && valMax != undefined  && valMin >= valMax ) {
+                            console.log("min max violation");
+                            tooltip.textContent = `min must be greater than max`;
+                            tooltip.style.visibility = "visible"; // Show the tooltip
+                        } else if (input.value < min || input.value > max) {
+                            tooltip.textContent = `Value must be between ${min} and ${max}.`;
+                            tooltip.style.visibility = "visible"; // Show the tooltip
                         }
                     });
+                    
+                    input.addEventListener("blur", function () {
+                        console.log("blur");
+                    });
+
+
+                    // console.log(fieldId);
+
+                    // Enforce constraints in real-time
+                    // input.addEventListener("input", function () {
+                    //     const value = parseFloat(input.value);
+
+                    //     const dropdown = document.getElementById(`${fieldId}-distribution`);
+                    //     const selectedValue = dropdown.options[dropdown.selectedIndex].value;
+
+
+
+                    //     // if (ret = document.getElementById(`${fieldId}-min`));
+                    //     // const valMax = parseFloat(document.getElementById(`${fieldId}-max`).value);
+                    //     const minBox = document.getElementById(`${fieldId}-min`);
+                    //     const maxBox = document.getElementById(`${fieldId}-max`);
+                    //     const valMin = minBox ? parseFloat(minBox.value) : undefined;
+                    //     const valMax = maxBox ? parseFloat(maxBox.value) : undefined;
+
+                        
+
+
+                    //     // console.log("Selected value:", selectedValue);
+                    //     // console.log(`${fieldId}-min`);
+                    //     console.log(valMin, valMax);
+
+                    //     // if (isNaN(value)) {
+                    //     //     input.value = defaults[param]; // Set default value or empty
+                    //     // }
+                    //     // if (!isNaN(value)) {
+                    //         // If input value violates min/max, show tooltip and reset
+                    //         if (value < min || value > max) {
+                    //             tooltip.textContent = `Value must be between ${min} and ${max}.`;
+                    //             tooltip.style.visibility = "visible"; // Show the tooltip
+                    //             // if (param == "max") {
+                    //             //     minBox.max = (parseFloat(input.value) - parseFloat(input.step));
+                    //             // } else if (param == "min") {
+                    //             //     maxBox.min = (parseFloat(input.value) + parseFloat(input.step));
+                    //             // }
+                    //         }
+                    //         else if ( valMin != undefined && valMax != undefined  && valMin >= valMax ) {
+                    //             console.log("min max violation");
+                    //             tooltip.textContent = `min must be greater than max`;
+                    //             tooltip.style.visibility = "visible"; // Show the tooltip
+
+                    //             // if (param == "min") {
+                    //             //     input.max = (valMax - parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                    //             // } else if (param == "max") {
+                    //             //     input.min = (valMin +  parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                    //             // }
+                    //             // minBox.max = (valMax - parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                    //             // maxBox.min = (valMin + parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                    //             // if (param == "min") {
+                    //             //     // input.value = (valMax - parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                    //             //     // maxBox.min = (input.value).toFixed(input.step.toString().length - 2);
+                    //             //     minBox.max = (valMax - parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                    //             //     maxBox.min = (input.value)
+                    //             // } else if (param == "max") {
+                    //             //     // input.value = (valMin +  parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                    //             //     // minBox.max = (input.value).toFixed(input.step.toString().length - 2);
+                    //             //     maxBox.min = (valMin +  parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                    //             //     minBox.max = (input.value)
+                    //             // }
+                    //         }
+
+
+                    //         // else if ( (selectedValue == "uniform" || selectedValue == "truncated_normal")) {
+                    //         //     // console.log(param, value);
+                    //         //     // console.log()
+                    //         //     console.log("match");
+                    //         // } 
+                    //         // else {
+                    //         //     tooltip.style.visibility = "hidden"; // Hide the tooltip
+                    //         // }
+                    //     // }
+
+                    //     if ( param == "min" || param == "max" ) {
+
+                    //     }
+
+                    // });
+
+                    // // Automatically adjust out-of-range values on blur
+                    // input.addEventListener("blur", function () {
+                    //     const value = parseFloat(input.value);
+
+                    //     const dropdown = document.getElementById(`${fieldId}-distribution`);
+                    //     const selectedValue = dropdown.options[dropdown.selectedIndex].value;
+
+                    //     const minBox = document.getElementById(`${fieldId}-min`);
+                    //     const maxBox = document.getElementById(`${fieldId}-max`);
+                    //     const valMin = minBox ? parseFloat(minBox.value) : undefined;
+                    //     const valMax = maxBox ? parseFloat(maxBox.value) : undefined;
+
+                    //     if (isNaN(value)) {
+                    //         input.value = defaults[param]; // Set default value or empty
+                    //     }
+
+
+                    //     if (value < input.min || value > input.max) {
+                    //         input.value = Math.max(input.min, Math.min(value, input.max));
+                    //         // minBox.max = (valMax - parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                    //         // maxBox.min = (valMin +  parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                    //         console.log("abs violations. new: ", input.value);
+                    //         if (param == "max") {
+                    //             minBox.max = (parseFloat(input.value) - parseFloat(input.step));
+                    //         } else if (param == "min") {
+                    //             maxBox.min = (parseFloat(input.value) + parseFloat(input.step));
+                    //         }
+                    //     }
+                    //     if ( valMin != undefined && valMax != undefined  && valMin >= valMax ) {
+                    //         if (param == "min") {
+                    //             input.value = (valMax - parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                    //             minBox.max = input.value;
+                    //             maxBox.min = (parseFloat(input.value) + parseFloat(input.step))
+
+                    //             console.log("minBox.max: ", minBox.max);
+                    //             console.log("maxBox.min: ", maxBox.min);
+                    //         } else if (param == "max") {
+                    //             input.value = (valMin +  parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                    //             maxBox.min = input.value;
+                    //             minBox.max = (parseFloat(input.value) - parseFloat(input.step))
+                    //         }
+                    //         // 
+                    //         //
+                    //     }
+                    //     tooltip.style.visibility = "hidden"; // Hide tooltip if corrected
+                    // });
                 }
 
                 const paramLabel = document.createElement("label");
