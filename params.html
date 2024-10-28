@@ -24,7 +24,11 @@
                 label: "INEQUALITY",
                 default: {
                     distribution : "fixed",
-                    val : 0.001
+                    val : 0.001,
+                    min: 0,
+                    max: 1,
+                    mean: 0.001,
+                    stddev: 0.0001
                 },
                 constraints: {
                     min: 0,
@@ -101,27 +105,29 @@
             // Create input fields based on the selected distribution type
             const fieldsToCreate = distributionFields[distribution] || [];
 
-            const universalConstraints = formFields[fieldId].constraints;
+            
             
             fieldsToCreate.forEach(param => {
                 const input = document.createElement("input");
                 input.type = "number";
                 input.name = `${fieldId}-${param}`;
                 input.id = `${fieldId}-${param}`;
-                input.value = defaults[param] || ''; // Set default value or empty
-
-                // const tooltip = document.createElement("span");
-                // tooltip.className = "tooltip";
-                // tooltip.style.visibility = "hidden";
-                // tooltip.style.color = "red";
+                input.value = defaults[param]; // Set default value or empty
+                console.log(param, defaults[param]);
 
                 // Create a tooltip element
                 const tooltip = document.createElement("span");
                 tooltip.className = "tooltip";
-                tooltip.style.display = "none"; // Initially hide tooltip
-                tooltip.style.visibility = "hidden";
+                tooltip.textContent = "";  // Text will be set if constraint is violated
+                tooltip.style.visibility = "hidden";  // Hidden by default
                 tooltip.style.color = "red";
-                dynamicFieldsContainer.appendChild(tooltip);
+                tooltip.style.fontSize = "12px";
+                tooltip.style.marginLeft = "5px";
+
+                // Append tooltip to the dynamic fields container
+                dynamicFieldsContainer.appendChild(tooltip); // <-- Append the tooltip here
+
+                const universalConstraints = formFields[fieldId].constraints;
 
                 // Apply constraints if they exist
                 if (universalConstraints) {
@@ -130,41 +136,98 @@
                     if (max !== undefined) input.max = max;
                     if (step !== undefined) input.step = step;
 
+                    
+
+                    // console.log(fieldId);
+
                     // Enforce constraints in real-time
                     input.addEventListener("input", function () {
                         const value = parseFloat(input.value);
-                        console.log(value);
+
+                        const dropdown = document.getElementById(`${fieldId}-distribution`);
+                        const selectedValue = dropdown.options[dropdown.selectedIndex].value;
+
+
+
+                        // if (ret = document.getElementById(`${fieldId}-min`));
+                        // const valMax = parseFloat(document.getElementById(`${fieldId}-max`).value);
+                        const minBox = document.getElementById(`${fieldId}-min`);
+                        const maxBox = document.getElementById(`${fieldId}-max`);
+                        const valMin = minBox ? parseFloat(minBox.value) : undefined;
+                        const valMax = maxBox ? parseFloat(maxBox.value) : undefined;
+
+                        if (param == "min") {
+                            input.max = (valMax - parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                        } else if (param == "max") {
+                            input.min = (valMin +  parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                        }
+
+
+                        // console.log("Selected value:", selectedValue);
+                        // console.log(`${fieldId}-min`);
+                        console.log(valMin, valMax);
+
                         if (!isNaN(value)) {
                             // If input value violates min/max, show tooltip and reset
-                            console.log(min);
-                            console.log(max);
                             if (value < min || value > max) {
-                                console.log("showing tooltip");
                                 tooltip.textContent = `Value must be between ${min} and ${max}.`;
-                                tooltip.style.visibility = "visible";
-                            } else {
-                                tooltip.style.visibility = "hidden";
+                                tooltip.style.visibility = "visible"; // Show the tooltip
+                            }
+                            else if ( valMin != undefined && valMax != undefined  && valMin >= valMax ) {
+                                console.log("min max violation");
+                                tooltip.textContent = `min must be greater than max`;
+                                tooltip.style.visibility = "visible"; // Show the tooltip
+                            }
+                            // else if ( (selectedValue == "uniform" || selectedValue == "truncated_normal")) {
+                            //     // console.log(param, value);
+                            //     // console.log()
+                            //     console.log("match");
+                            // } 
+                            else {
+                                tooltip.style.visibility = "hidden"; // Hide the tooltip
                             }
                         }
                     });
 
                     // Automatically adjust out-of-range values on blur
-                    input.addEventListener("change", function () {
+                    input.addEventListener("blur", function () {
                         const value = parseFloat(input.value);
+
+                        const dropdown = document.getElementById(`${fieldId}-distribution`);
+                        const selectedValue = dropdown.options[dropdown.selectedIndex].value;
+
+                        const minBox = document.getElementById(`${fieldId}-min`);
+                        const maxBox = document.getElementById(`${fieldId}-max`);
+                        const valMin = minBox ? parseFloat(minBox.value) : undefined;
+                        const valMax = maxBox ? parseFloat(maxBox.value) : undefined;
+
                         if (!isNaN(value)) {
-                            input.value = Math.max(min, Math.min(value, max));
-                            tooltip.style.visibility = "hidden";
+                            
+                            if (value < min || value > max) {
+                                input.value = Math.max(min, Math.min(value, max));
+                            }
+                            else if ( valMin != undefined && valMax != undefined  && valMin >= valMax ) {
+                                if (param == "min") {
+                                    input.value = (valMax - parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                                } else if (param == "max") {
+                                    input.value = (valMin +  parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                                }
+                            }
+                            tooltip.style.visibility = "hidden"; // Hide tooltip if corrected
                         }
                     });
                 }
+
                 const paramLabel = document.createElement("label");
-                paramLabel.for = input.id;
+                paramLabel.htmlFor = input.name; // Using name instead of id
                 paramLabel.textContent = ` ${param}: `;
 
                 dynamicFieldsContainer.appendChild(paramLabel);
                 dynamicFieldsContainer.appendChild(input);
+                dynamicFieldsContainer.appendChild(tooltip); // Append tooltip after the input
                 dynamicFieldsContainer.appendChild(document.createElement("br"));
             });
+
         }
 
 
