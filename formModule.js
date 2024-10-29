@@ -78,7 +78,14 @@ define(["text!formFields.json"], function (formFieldsData) {
             input.type = "number";
             input.name = `${fieldId}-${param}`;
             input.id = `${fieldId}-${param}`;
-            input.value = defaults[param]; // Set default value or empty
+
+            if (distribution == "lognormal") {
+                input.value = Math.log(parseFloat(defaults[param])).toFixed(4);
+            } else {
+                input.value = defaults[param]; // Set default value or empty
+            }
+
+
 
             // Create a tooltip element
             const tooltip = document.createElement("span");
@@ -187,7 +194,6 @@ define(["text!formFields.json"], function (formFieldsData) {
     }
 
     function resetToDefaults() {
-        console.log("resetting.....");
         Object.keys(formFields).forEach(fieldID => {
             const field = formFields[fieldID];
             const defaultdist = field.default.distribution;
