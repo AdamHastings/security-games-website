@@ -1,0 +1,82 @@
+{
+    "INEQUALITY" : {
+        "default": {"distribution" : "fixed","val" : 0.001,"min": 0,"max": 1,"mean": 0.001,"stddev": 0.0001},
+        "constraints": {"min": 0,"max": 1,"step": 0.0001,"allowed_dists": ["fixed", "lognormal", "normal", "truncated_normal", "uniform"]}
+    },
+    "RANSOM_B0" : {
+        "default": { "distribution" : "fixed", "val" : 792145, "min": 0, "max": 1000000000, "mean": 792145, "stddev": 792145},
+        "constraints": { "min": 0, "max": 1000000000, "step": 1, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "RANSOM_B1" : {
+        "default": { "distribution" : "fixed", "val" : 0.00121, "min": 0, "max": 1, "mean": 0.00121, "stddev": 0.00121},
+        "constraints": { "min": 0, "max": 1, "step": 0.00001, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "RECOVERY_COST_BASE" : {
+        "default": { "distribution" : "fixed", "val" : 230123, "min": 0, "max": 1000000000, "mean": 230123, "stddev": 230123},
+        "constraints": { "min": 0, "max": 1000000000, "step": 1, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "RECOVERY_COST_EXP" : {
+        "default": { "distribution" : "fixed", "val" : 0.125, "min": 0, "max": 1, "mean": 0.125, "stddev": 0.125},
+        "constraints": { "min": 0, "max": 1, "step": 0.001, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "WEALTH" : {
+        "default": { "distribution" : "lognormal", "val" : 3.113, "min": 0, "max": 10, "mean": 3.113, "stddev": 3.060},
+        "constraints": { "min": 0, "max": 10, "step": 0.001, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "POSTURE" : {
+        "default": { "distribution" : "truncated_normal", "val" : 0.28, "min": 0, "max": 1, "mean": 0.28, "stddev": 0.10},
+        "constraints": { "min": 0, "max": 1, "step": 0.01, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "POSTURE_NOISE" : {
+        "default": { "distribution" : "normal", "val" : 0, "min": -1, "max": 1, "mean": 0, "stddev": 0.10},
+        "constraints": { "min": -1, "max": 1, "step": 0.01, "allowed_dists": ["fixed", "lognormal", "normal", "truncated_normal", "uniform"]}
+    },
+    "NUM_QUOTES" : {
+        "default": { "distribution" : "truncated_normal", "val" : 10, "min": 0, "max": 100, "mean": 10, "stddev": 2},
+        "constraints": { "min": 0, "max": 100, "step": 1, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "LOSS_RATIO" : {
+        "default": { "distribution" : "fixed", "val" : 0.80, "min": 0, "max": 1, "mean": 0.80, "stddev": 0.1},
+        "constraints": { "min": 0, "max": 1, "step": 0.01, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "RETENTION_REGRESSION_FACTOR" : {
+        "default": { "distribution" : "fixed", "val" : 25, "min": 0, "max": 1000, "mean": 25, "stddev": 10},
+        "constraints": { "min": 0, "max": 1000, "step": 1, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "NUM_DEFENDERS" : {
+        "default": { "distribution" : "fixed", "val" : 50, "min": 0, "max": 500, "mean": 50, "stddev": 10},
+        "constraints": { "min": 0, "max": 500, "step": 1, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "NUM_INSURERS" : {
+        "default": { "distribution" : "fixed", "val" : 20, "min": 0, "max": 500, "mean": 20, "stddev": 10},
+        "constraints": { "min": 0, "max": 500, "step": 1, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "NUM_ATTACKERS" : {
+        "default": { "distribution" : "fixed", "val" : 5, "min": 0, "max": 500, "mean": 5, "stddev": 2},
+        "constraints": { "min": 0, "max": 500, "step": 1, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "ATTACKS_PER_EPOCH" : {
+        "default": { "distribution" : "fixed", "val" : 100, "min": 0, "max": 500, "mean": 100, "stddev": 10},
+        "constraints": { "min": 0, "max": 500, "step": 1, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "CTA_SCALING_FACTOR" : {
+        "default": { "distribution" : "fixed", "val" : 0.857, "min": 0, "max": 10, "mean": 0.857, "stddev": 0.2},
+        "constraints": { "min": 0, "max": 10, "step": 0.001, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "DEPRECIATION" : {
+        "default": { "distribution" : "fixed", "val" : 0.4, "min": 0, "max": 1, "mean": 0.4, "stddev": 0.1},
+        "constraints": { "min": 0, "max": 1, "step": 0.01, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "TARGET_SECURITY_SPENDING" : {
+        "default": { "distribution" : "fixed", "val" : 0.01, "min": 0, "max": 1, "mean":  0.01, "stddev": 0.001},
+        "constraints": { "min": 0, "max": 1, "step": 0.001, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "INVESTMENT_SCALING_FACTOR" : {
+        "default": { "distribution" : "fixed", "val" : 25, "min": 0, "max": 1000, "mean":  25, "stddev": 5},
+        "constraints": { "min": 0, "max": 1000, "step": 1, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    },
+    "MANDATORY_INVESTMENT" : {
+        "default": { "distribution" : "fixed", "val" : 0, "min": 0, "max": 1, "mean":  0, "stddev": 0.001},
+        "constraints": { "min": 0, "max": 1, "step": 0.001, "allowed_dists": ["fixed", "lognormal", "truncated_normal", "uniform"]}
+    }
+}
