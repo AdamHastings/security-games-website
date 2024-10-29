@@ -4,21 +4,19 @@
     <title>Dynamic Data Input Form with Distribution Types</title>
 </head>
 <body>
+    <h1>Inputs</h1>
     <form id="dataForm"></form>
-    <button type="submit" id="submitBtn">Submit</button>
+    <br>
+    <button type="submit" id="submitBtn"  onclick="document.getElementById('iframe-generated').src='process_input.php'">Submit</button>
+
+    <h1>Results</h1>
+    <!--  <button onclick="document.getElementById('iframe-generated').src='process_input.php'">Load Generated HTML</button> -->
+
+    <!-- The iframe will display the generated HTML -->
+    <iframe id="iframe-generated" style="width:800px; height:400px;"></iframe>
 
 
     <script>
-        // const formFields = [
-        //     { id: "INEQUALITY", label: "Inequality", distribution: "fixed", val: 0.001, min: 0, max: 1, step: 0.0001 },
-        //     { id: "RANSOM_B0", label: "Ransom B0", distribution: "fixed", val: 792145 },
-        //     { id: "RANSOM_B1", label: "Ransom B1", distribution: "fixed", val: 0.00121 },
-        //     { id: "RECOVERY_COST_BASE", label: "Recovery Cost Base", distribution: "fixed", val: 230123 },
-        //     { id: "RECOVERY_COST_EXP", label: "Recovery Cost Exp", distribution: "fixed", val: 0.125 },
-        //     { id: "WEALTH", label: "Wealth", distribution: "lognormal", mean: 1.1356082157016467, stddev: 1.1184432636889245 },
-        //     { id: "POSTURE", label: "Posture", distribution: "truncated_normal", mean: 0.28, stddev: 0.10, min: 0.0, max: 1.0 },
-        //     { id: "NUM_QUOTES", label: "Number of Quotes", distribution: "fixed", val: 10 }
-        // ];
         const formFields = {
             "INEQUALITY" : {
                 default: {
@@ -329,7 +327,7 @@
                 });
             });
 
-            fetch('process.php', {
+            fetch('process_input.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)

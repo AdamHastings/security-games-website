@@ -31,10 +31,11 @@ if ($return_var === 0) {
 $script_command = "./asset_flow_sankey.py $logname";
 exec($script_command);
 $sankey_filename = "figs/" . $timestamp . "_asset_flow_sankey.html";
-// chmod($sankey_filename, 0644);
 
 // TODO remove
-$sankey_filename = "figs/server_config_asset_flow_sankey.html";
+$sankey_filename = "figs/fullsize_short_asset_flow_sankey.html";
+chmod($sankey_filename, 0644);
+
 
 
 echo $sankey_filename."<br>\n";
