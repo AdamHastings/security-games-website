@@ -175,7 +175,71 @@
                     });
                     
                     input.addEventListener("blur", function () {
-                        console.log("blur");
+                        const value = parseFloat(input.value);
+
+                        const dropdown = document.getElementById(`${fieldId}-distribution`);
+                        const selectedValue = dropdown.options[dropdown.selectedIndex].value;
+
+                        const minBox = document.getElementById(`${fieldId}-min`);
+                        const maxBox = document.getElementById(`${fieldId}-max`);
+                        const valMin = minBox ? parseFloat(minBox.value) : undefined;
+                        const valMax = maxBox ? parseFloat(maxBox.value) : undefined;
+
+                        if (isNaN(value)) {
+                            input.value = defaults[param]; // Set default value or empty
+                        }
+                        if (value < input.min ) {
+                            input.value = input.min;
+                        }
+                        if (value > input.max) {
+                            input.value = input.max;
+                        }
+                        if (valMin >= valMax) {
+                            if (param == "min") {
+                                input.value = minBox.max;
+                            }
+                            if (param == "max") {
+                                input.value = maxBox.min;
+                            }
+                        }
+
+                        if (param == "min") {
+                            maxBox.min = (parseFloat(input.value) + parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                        } else if (param == "max") {
+                            minBox.max = (parseFloat(input.value) - parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                        }
+
+                        console.log("minBox bounds: ", minBox.min, minBox.max);
+                        console.log("maxBox bounds: ", maxBox.min, maxBox.max);
+
+                        // if (value < input.min || value > input.max) {
+                        //     input.value = Math.max(input.min, Math.min(value, input.max));
+                        //     // minBox.max = (valMax - parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                        //     // maxBox.min = (valMin +  parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                        //     console.log("abs violations. new: ", input.value);
+                        //     if (param == "max") {
+                        //         minBox.max = (parseFloat(input.value) - parseFloat(input.step));
+                        //     } else if (param == "min") {
+                        //         maxBox.min = (parseFloat(input.value) + parseFloat(input.step));
+                        //     }
+                        // }
+                        // if ( valMin != undefined && valMax != undefined  && valMin >= valMax ) {
+                        //     if (param == "min") {
+                        //         input.value = (valMax - parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                        //         minBox.max = input.value;
+                        //         maxBox.min = (parseFloat(input.value) + parseFloat(input.step))
+
+                        //         console.log("minBox.max: ", minBox.max);
+                        //         console.log("maxBox.min: ", maxBox.min);
+                        //     } else if (param == "max") {
+                        //         input.value = (valMin +  parseFloat(input.step)).toFixed(input.step.toString().length - 2);
+                        //         maxBox.min = input.value;
+                        //         minBox.max = (parseFloat(input.value) - parseFloat(input.step))
+                        //     }
+                        //     // 
+                        //     //
+                        // }
+                        tooltip.style.visibility = "hidden"; // Hide tooltip if corrected
                     });
 
 
