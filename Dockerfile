@@ -1,5 +1,5 @@
 # Use a Debian-based image as it provides good support for both Python and PHP
-FROM php:latest
+FROM php:8.2-apache
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \

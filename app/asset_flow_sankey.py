@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import plotly.graph_objects as go
 import pandas as pd
