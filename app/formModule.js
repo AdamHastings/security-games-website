@@ -210,29 +210,35 @@ define(["text!formFields.json"], function (formFieldsData) {
 
 
 
-    // // Collect form data and submit
-    // document.getElementById("submitBtn").addEventListener("click", function (e) {
-    //     e.preventDefault();
-    //     const formData = {};
-    //     formFields.forEach(field => {
-    //         const distribution = document.getElementById(`${field.id}-distribution`).value;
-    //         formData[field.id] = { distribution };
-    //         distributionFields[distribution].forEach(param => {
-    //             formData[field.id][param] = parseFloat(document.getElementById(`${field.id}-${param}`).value);
-    //         });
-    //     });
+    // Collect form data and submit
+    document.getElementById("submitBtn").addEventListener("click", function (e) {
+        e.preventDefault();
+        const formData = {};
+        Object.keys(formFields).forEach(field => {
+            const distribution = document.getElementById(`${field}-distribution`);
+            const selected = distribution.value;
+            
+            formData[field] = { };
+            formData[field]["distribution"] = selected;
+            distributionFields[selected].forEach(param => {
+                formData[field][param] = parseFloat(document.getElementById(`${field}-${param}`).value);
+            });
+        });
 
-    //     fetch('process_input.php', {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify(formData)
-    //     })
-    //     .then(response => response.json())
-    //     .then(result => {
-    //         const plotData = result.plotData;
-    //         Plotly.newPlot('plotly-div', plotData);
-    //     })
-    //     .catch(error => console.error('Error:', error));
-    // });
+        fetch('save_data.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert('Data saved successfully');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to save data');
+        });
+    });
 
 });
