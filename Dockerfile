@@ -21,7 +21,6 @@ RUN ls -la /
 # Adjust permissions if needed
 RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
 
-
 # Expose port 80 for web traffic
 EXPOSE 80
 

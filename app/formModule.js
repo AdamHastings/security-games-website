@@ -210,6 +210,7 @@ define(["text!formFields.json"], function (formFieldsData) {
 
 
 
+
     // Collect form data and submit
     document.getElementById("submitBtn").addEventListener("click", function (e) {
         e.preventDefault();
@@ -224,20 +225,28 @@ define(["text!formFields.json"], function (formFieldsData) {
                 formData[field][param] = parseFloat(document.getElementById(`${field}-${param}`).value);
             });
         });
+        console.log(formData);
 
         fetch('process_input.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
         })
-        .then(response => response.json())
+        .then(response => response.json())  // Parse JSON response
         .then(data => {
-            console.log('Success:', data);
-            alert('Data saved successfully');
+            // Get the iframe element
+            var iframe = document.getElementById('iframe-generated');
+            
+            // Inject the HTML content into the iframe using srcdoc
+            iframe.srcdoc = data.sankeyhtml;  
+            console.log(data.logname);
+            console.log(data.script_command);
+            console.log(data.config_filename);
+            console.log(data.sankey_filename);
+            
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Failed to save data');
+            console.error('Error:', error);  // Handle errors
         });
     });
 

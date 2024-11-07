@@ -3,68 +3,103 @@
 // Set content type to JSON
 header('Content-Type: application/json');
 
-// Read the incoming JSON data
-$data = json_decode(file_get_contents('php://input'), true);
+// // Get the current Unix timestamp with microsecond precision
+// $microtime = microtime(true);  // Returns float with microseconds precision
 
-if ($data) {
-    file_put_contents('configs/log.txt', print_r($data, true));  // For debugging
-    $filename = 'configs/data_' . time() . '.json';
-    file_put_contents($filename, json_encode($data, JSON_PRETTY_PRINT));
-    echo json_encode(['status' => 'success', 'message' => 'Data saved successfully']);
-} else {
-    echo json_encode(['status' => 'error', 'message' => 'Failed to parse data']);
-}
+// // Format the timestamp as seconds.microseconds (e.g., 1724510801.123456)
+// $timestamp = sprintf('%.6f', $microtime);
 
-// Get the current Unix timestamp with microsecond precision
-$microtime = microtime(true);  // Returns float with microseconds precision
+// $config_filename = 'configs/data_' . $timestamp . '.json';
 
-// Format the timestamp as seconds.microseconds (e.g., 1724510801.123456)
-$timestamp = sprintf('%.6f', $microtime);
 
-// The ELF file or command you want to run
-$elf_file = './run/release/run_games';
-$config = 'server_config.json'; // replace later with custom config scraped from html form
-$logname = "$timestamp.csv";
 
-$command = "$elf_file $config $logname";
+// // $response = $config_filename;
 
-echo $timestamp."<br>\n";
-echo $command."<br>\n";
 
-// Execute the command using exec()
-$return_var = null;
-system($command, $return_var);
+// // // Read the incoming JSON data
+// $data = json_decode(file_get_contents('php://input'), true);
 
-// Check the result
-if ($return_var === 0) {
-    echo "Command executed successfully.<br>";
-} else {
-    echo "Error executing the command. Return code: " . $return_var."<br>\n";
-}
+// if ($data) {
+//     // file_put_contents('configs/log.txt', print_r($data, true));  // For debugging
+//     file_put_contents($filename, json_encode($config_filename, JSON_PRETTY_PRINT));
+//     // echo json_encode(['status' => 'success', 'message' => 'Data saved successfully']);
+// } else {
+//     echo json_encode(['status' => 'error', 'message' => 'Failed to parse data']);
+// }
 
-// create the plotly figures
+// // TODO delete
+$config_filename = 'configs/server_config.json';
+
+
+// // // The ELF file or command you want to run
+// $elf_file = './run/release/run_games';
+// $logname = "logs/$timestamp.csv";
+
+
+// //TODO erase
+$logname = "logs/server_config.csv";
+
+// chmod($logname, 0644);
+
+
+// $command = "$elf_file $config_filename";
+
+// // echo $timestamp."<br>\n";
+// // echo $command."<br>\n";
+
+// // Execute the command using exec()
+// $return_var = null;
+// // exec($command, $return_var);
+
+// // Check the result
+// // if ($return_var === 0) {
+// //     echo "Command executed successfully.<br>";
+// // } else {
+// //     echo "Error executing the command. Return code: " . $return_var."<br>";
+// // }
+
+// // create the plotly figures
 $script_command = "./asset_flow_sankey.py $logname";
-exec($script_command);
-$sankey_filename = "figs/" . $timestamp . "_asset_flow_sankey.html";
+// // $pythonresponse = exec($script_command);
 
-// TODO remove
-// $sankey_filename = "figs/fullsize_short_asset_flow_sankey.html";
+
+// $sankey_filename = "figs/" . $timestamp . "_asset_flow_sankey.html";
+
+$sankey_filename = "figs/server_config_asset_flow_sankey.html";
+
 chmod($sankey_filename, 0644);
 
 
 
-echo $sankey_filename."<br>\n";
+// // echo $sankey_filename."<br>\n";
+
+// $response = $response . $sankey_filename;
+
+
 
 // Check if the file exists
 if (file_exists($sankey_filename)) {
     // Read and return the contents of the HTML file
-    echo file_get_contents($sankey_filename);
+    $sankeyhtml = file_get_contents($sankey_filename);
 } else {
     // Handle the case where the file doesn't exist
-    echo "<h1>Error: The requested HTML file does not exist.</h1>";
+    $sankeyhtml = "<h1>Error: The requested HTML file does not exist.</h1>";
 }
 
+// unlink($config_filename);
 // unlink($logname);
 // unlink($sankey_filename);
 
+
+// echo json_encode($response);
+
+$htmlContent = "<h2>This is the content inside the iframe</h2>";
+$response = array(
+    "sankeyhtml" => $sankeyhtml,
+    "logname" => $logname,
+    "script_command" => $script_command,
+    "config_filename" => $config_filename,
+    "sankey_filename" => $sankey_filename
+);
+echo json_encode($response);
 ?> 
