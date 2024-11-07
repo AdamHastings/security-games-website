@@ -225,6 +225,17 @@ define(["text!formFields.json"], function (formFieldsData) {
                 formData[field][param] = parseFloat(document.getElementById(`${field}-${param}`).value);
             });
         });
+        formData['TARGET_SECURITY_SPENDING'] = {}
+        formData['TARGET_SECURITY_SPENDING']["distribution"] = "fixed";
+        formData['TARGET_SECURITY_SPENDING']["val"] = 0.01;
+
+        formData['MAX_ITERATIONS'] = {}
+        formData['MAX_ITERATIONS']["distribution"] = "fixed";
+        formData['MAX_ITERATIONS']["val"] = 500;
+
+        formData['NUM_GAMES'] = 1
+        formData['verbose'] = true;
+
         console.log(formData);
 
         fetch('process_input.php', {
@@ -245,6 +256,7 @@ define(["text!formFields.json"], function (formFieldsData) {
             console.log(data.sankey_filename);
             console.log(data.command);
             ////
+            console.log(data.written_contents);
 
         })
         .catch(error => {

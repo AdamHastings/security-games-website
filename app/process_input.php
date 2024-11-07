@@ -11,34 +11,31 @@ $timestamp = sprintf('%.6f', $microtime);
 
 $config_filename = 'configs/data_' . $timestamp . '.json';
 
-
 // // // Read the incoming JSON data
-$data = json_decode(file_get_contents('php://input'), true);
+$indata = json_decode(file_get_contents('php://input'), true);
 
-if ($data) {
+if ($indata) {
     // file_put_contents('configs/log.txt', print_r($data, true));  // For debugging
-    file_put_contents($config_filename, json_encode($data, JSON_PRETTY_PRINT));
+    file_put_contents($config_filename, json_encode($indata, JSON_PRETTY_PRINT));
     // echo json_encode(['status' => 'success', 'message' => 'Data saved successfully']);
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Failed to parse data']);
 }
 
-// // TODO delete
-$config_filename = 'configs/server_config.json';
+$written_contents = file_get_contents($config_filename);
 
 
-// // // The ELF file or command you want to run
+// $config_filename = 'configs/server_config.json';
+
+
+
+
+// The ELF file or command you want to run
 $elf_file = './run/release/run_games';
-// $logname = "logs/$timestamp.csv";
 
 
-// //TODO erase
-$logname = "logs/server_config.csv";
 
-// chmod($logname, 0644);
-
-
-$command = "$elf_file $config_filename";
+$command = "echo \"y\" | $elf_file $config_filename";
 
 // // echo $timestamp."<br>\n";
 // // echo $command."<br>\n";
@@ -55,13 +52,19 @@ exec($command, $return_var);
 // // }
 
 // // create the plotly figures
+$logname = "logs/data_$timestamp.csv";
+// //TODO erase
+// $logname = "logs/server_config.csv";
+
+// chmod($logname, 0644);
+
 $script_command = "./asset_flow_sankey.py $logname";
-// // $pythonresponse = exec($script_command);
+exec($script_command);
 
 
-// $sankey_filename = "figs/" . $timestamp . "_asset_flow_sankey.html";
+$sankey_filename = "figs/data_" . $timestamp . "_asset_flow_sankey.html";
 
-$sankey_filename = "figs/server_config_asset_flow_sankey.html";
+// $sankey_filename = "figs/server_config_asset_flow_sankey.html";
 
 chmod($sankey_filename, 0644);
 
@@ -87,6 +90,7 @@ if (file_exists($sankey_filename)) {
 // unlink($sankey_filename);
 
 
+
 // echo json_encode($response);
 
 $htmlContent = "<h2>This is the content inside the iframe</h2>";
@@ -96,7 +100,8 @@ $response = array(
     "script_command" => $script_command,
     "config_filename" => $config_filename,
     "sankey_filename" => $sankey_filename,
-    "command" => $command
+    "command" => $command,
+    "written_contents" => $written_contents
 );
 echo json_encode($response);
 ?> 

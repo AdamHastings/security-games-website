@@ -31,11 +31,11 @@ y0 = 'rgba(254, 203, 82,  {})'.format(opaque)
 r0 = 'rgba(239, 85,  59,  {})'.format(opaque)
 g0 = 'rgba(136, 136, 136, {})'.format(opaque)
 
-def asset_flow_sankey(df):
+def asset_flow_sankey(df, outfile):
 
-  basetitle = 'asset_flow_sankey'
-  dirname = 'figures'
-  subdirname = df['folder'][0]
+  # basetitle = 'asset_flow_sankey'
+  # dirname = 'figures'
+  # subdirname = df['folder'][0]
 
   df = df[[
             'd_init',
@@ -268,7 +268,7 @@ def asset_flow_sankey(df):
 
   # fig.update_layout(font_size=42)
   # fig.show()
-  path = 'figs/' + subdirname 
+  # path = 'figs/' 
   
   # if not os.path.isdir(path):
   #     os.mkdir(path)
@@ -276,7 +276,9 @@ def asset_flow_sankey(df):
   # # fig.update_layout(title_text="Basic Sankey Diagram", font_size=10)
   # fig.write_image(path + '/' + basetitle + '.png')
   # fig.write_image(path + '/' + basetitle + '.pdf')
-  fig.write_html(path + '_' + basetitle + '.html')
+  # print("python saving to ", outfile)
+  # sys.stderr.write("writing to ", outfile)
+  fig.write_html(outfile)
 
   
 
@@ -293,6 +295,8 @@ if __name__=="__main__":
   df = pd.read_csv(filename, header=0)
   filename = filename.replace("logs/", "")
   filename = filename.replace(".csv", "")
-  df['folder'] = filename
+  # df['filename'] = filename
+  outfile = 'figs/' + filename + '_asset_flow_sankey.html'
 
-  asset_flow_sankey(df)
+
+  asset_flow_sankey(df, outfile)
