@@ -243,7 +243,9 @@ define(["text!formFields.json"], function (formFieldsData) {
             console.log(data.script_command);
             console.log(data.config_filename);
             console.log(data.sankey_filename);
-            
+            console.log(data.command);
+            ////
+
         })
         .catch(error => {
             console.error('Error:', error);  // Handle errors
