@@ -225,7 +225,7 @@ define(["text!formFields.json"], function (formFieldsData) {
             });
         });
 
-        fetch('save_data.php', {
+        fetch('process_input.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)

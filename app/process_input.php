@@ -1,5 +1,20 @@
 <?php
 
+// Set content type to JSON
+header('Content-Type: application/json');
+
+// Read the incoming JSON data
+$data = json_decode(file_get_contents('php://input'), true);
+
+if ($data) {
+    file_put_contents('configs/log.txt', print_r($data, true));  // For debugging
+    $filename = 'configs/data_' . time() . '.json';
+    file_put_contents($filename, json_encode($data, JSON_PRETTY_PRINT));
+    echo json_encode(['status' => 'success', 'message' => 'Data saved successfully']);
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Failed to parse data']);
+}
+
 // Get the current Unix timestamp with microsecond precision
 $microtime = microtime(true);  // Returns float with microseconds precision
 
@@ -33,7 +48,7 @@ exec($script_command);
 $sankey_filename = "figs/" . $timestamp . "_asset_flow_sankey.html";
 
 // TODO remove
-$sankey_filename = "figs/fullsize_short_asset_flow_sankey.html";
+// $sankey_filename = "figs/fullsize_short_asset_flow_sankey.html";
 chmod($sankey_filename, 0644);
 
 

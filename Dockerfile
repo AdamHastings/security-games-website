@@ -8,11 +8,15 @@ RUN apt-get update && apt-get install -y \
     python3-numpy \
     python3-pandas \
     python3-plotly \
+    libgsl-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+ENV LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
+
 # Copy PHP scripts and binaries into the appropriate directories in the container
 COPY app/ /var/www/html/
+RUN ls -la /
 
 # Adjust permissions if needed
 RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
