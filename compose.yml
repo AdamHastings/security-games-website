@@ -1,0 +1,25 @@
+services:
+  cyberspending:
+    container_name: cyberspending_web
+    build: .
+    hostname: cyberspending
+    networks:
+    - connex-net
+    restart: unless-stopped
+    logging:
+      driver: syslog
+      options:
+        syslog-format: rfc3164
+        syslog-facility: local3
+        tag: cyberspending
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cyberspending.rule=Host(`cyberspending.cs.columbia.edu`) "
+      - "traefik.http.routers.cyberspending.entrypoints=web,web-secure"
+      - "traefik.http.routers.cyberspending.tls.certresolver=connexCertResolver"
+      - "traefik.http.routers.cyberspending.tls=true"
+
+networks:
+  connex-net:
+    external: true
+
