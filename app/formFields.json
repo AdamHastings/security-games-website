@@ -24,7 +24,7 @@
 			"min": 0,
 			"max": 1000000000,
 			"mean": 792145,
-			"stddev": 792145
+			"stddev": 100000
 		},
 		"constraints": { 
 			"min": 0,

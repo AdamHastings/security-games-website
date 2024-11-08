@@ -1,15 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <title>Dynamic Data Input Form with Distribution Types</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Load Generated HTML in iframe</title>
+    
+
 </head>
 <body>
-    <h1>Original HTML Page</h1>
-    <button onclick="document.getElementById('iframe-generated').src='process_input.php'">Load Generated HTML</button>
+    <h1>Inputs</h1>
+    <form id="dataForm"></form>
+    <br>
+    <button type="submit" id="submitBtn">Run</button>
+    <button type="button" id="resetButton">Reset</button>
+
+    <h1>Results</h1>
+    <!--  <button onclick="document.getElementById('iframe-generated').src='process_input.php'">Load Generated HTML</button> -->
 
     <!-- The iframe will display the generated HTML -->
-    <iframe id="iframe-generated" style="width:100%; height:400px;"></iframe>
+    <iframe id="iframe-generated" style="width:800px; height:400px;"></iframe>
+
+
+    <script src="require.js"></script>
+    <script>
+        require.config({
+            paths: {
+                text: "text"  // Adjust the path to where you saved text.js
+            }
+        });
+
+        require(["formModule"]);
+    </script>
 </body>
 </html>
