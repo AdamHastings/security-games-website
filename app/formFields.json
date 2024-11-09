@@ -1,5 +1,6 @@
 {
 	"INEQUALITY" : {
+		"common name" : "Attacker inequality ratio",
 		"description" : "Scaling factor to determine wealth inequality between defenders and attackers", 
 		"default": {
 			"distribution" : "fixed",
@@ -17,6 +18,7 @@
 		}		
 	},
 	"RANSOM_B0" : {
+		"common name" : "Ransom cost function parameter B2",
 		"description" : "Parameter for determining ransom prices. Ransom = B0 + B1 * wealth",
 		"default": {
 			"distribution" : "fixed",
@@ -34,6 +36,7 @@
 		}
 	},
 	"RANSOM_B1" : {
+		"common name" : "Ransom cost function paramter B1",
 		"description" : "Parameter for determining ransom prices. Ransom = B0 + B1 * wealth",
 		"default": {		
 			"distribution" : "fixed",
@@ -51,6 +54,7 @@
 		}		
 	},
 	"RECOVERY_COST_BASE" : {
+		"common name" : "Recovery cost function base parameter",
 		"description" : "Parameter for determining cost of recovering from ransomware prices. Recovery cost = a * (wealth)^n",
 		"default": {
 			"distribution" : "fixed", 
@@ -68,6 +72,7 @@
 		}		
 	},
 	"RECOVERY_COST_EXP" : {
+		"common name" : "Recovery cost function exponent parameter",
 		"description" : "Parameter for determining cost of recovering from ransomware prices. Recovery cost = a * (wealth)^n",
 		"default": {
 			"distribution" : "fixed", 
@@ -85,6 +90,7 @@
 		}		
 	},
 	"WEALTH" : {
+		"common name" : "Initial wealth",
 		"description" : "Distribution of defender and insurer initial wealth",
 		"default": {
 			"distribution" : "lognormal",
@@ -102,6 +108,7 @@
 		}		
 	},
 	"POSTURE" : {
+		"common name" : "Security posture",
 		"description" : "Distribution of defenders' initial security posture",
 		"default": {
 			"distribution" : "truncated_normal",
@@ -120,6 +127,7 @@
 		}		
 	},
 	"POSTURE_NOISE" : {
+		"common name" : "Security posture noise",
 		"description" : "Distribution of noise added to insurers' audit estimates of a defender's security posture",
 		"default": {
 			"distribution" : "normal",
@@ -137,6 +145,7 @@
 		}		
 	},
 	"NUM_QUOTES" : {
+		"common name" : "Number of quotes requested per round",
 		"description" : "Distribution of the number of insurance quotes a defender will seek each round",
 		"default": {
 			"distribution" : "truncated_normal",
@@ -154,6 +163,7 @@
 		}		
 	},
 	"LOSS_RATIO" : {
+		"common name" : "Insurer loss ratio",
 		"description" : "Insurers' operating loss ratio (i.e. the percentage of collected premiums paid out in claims)",
 		"default": {
 			"distribution" : "fixed",
@@ -171,6 +181,7 @@
 		}		
 	},
 	"RETENTION_REGRESSION_FACTOR" : {
+		"common name" : "Retention size scaling parameter",
 		"description" : "Regression factor to determine insurance retention prices as a function of premium",
 		"default": {
 			"distribution" : "fixed",
@@ -188,6 +199,7 @@
 		}		
 	},
 	"NUM_DEFENDERS" : {
+		"common name" : "Number of defenders",
 		"description" : "Number of Defender agents initialized at the start of simulation",
 		"default": {
 			"distribution" : "fixed",
@@ -205,6 +217,7 @@
 		}		
 	},
 	"NUM_INSURERS" : {
+		"common name" : "Number of insurers",
 		"description" : "Number of Insurer agents initialized at the start of simulation",
 		"default": {
 			"distribution" : "fixed",
@@ -222,6 +235,7 @@
 		}		
 	},
 	"NUM_ATTACKERS" : {
+		"common name" : "Number of attackers",
 		"description" : "Number of Attacker agents initialized at the start of simulation",
 		"default": {
 			"distribution" : "fixed",
@@ -239,6 +253,7 @@
 		}		
 	},
 	"ATTACKS_PER_EPOCH" : {
+		"common name" : "Attacks per round ",
 		"description" : "The number of defenders that each attacker will attempt to attack each round",
 		"default": {
 			"distribution" : "fixed",
@@ -256,6 +271,7 @@
 		}		
 	},
 	"CTA_SCALING_FACTOR" : {
+		"common name" : "Attack cost scaling factor",
 		"description" : "A scaling factor in determining the amount an attacker must wager to attempt an attack on a given defender, given by wager = cta * wealth * posture",
 		"default": {
 			"distribution" : "fixed",
@@ -273,6 +289,7 @@
 		}		
 	},
 	"DEPRECIATION" : {
+		"common name" : "CapEx Depreciation",
 		"description" : "Depreciation rate for capital expenditures allocated for security",
 		"default": {
 			"distribution" : "fixed",
@@ -290,6 +307,7 @@
 		}		
 	},
 	"INVESTMENT_SCALING_FACTOR" : {
+		"common name" : "Security Investment Scaling Factor",
 		"description" : "Scaling factor for calculating security posture given investment x: posture = erf( S * x)",
 		"default": {
 			"distribution" : "fixed",
@@ -307,6 +325,7 @@
 		}		
 	},
 	"MANDATORY_INVESTMENT" : {
+		"common name" : "Mandatory Investment",
 		"description" : "Percentage of defender assets that must be spent on security each round",
 		"default": {
 			"distribution" : "fixed",
