@@ -12,50 +12,67 @@ define(["text!formFields.json"], function (formFieldsData) {
     };
 
     function createForm() {
-        // Define the fields needed for each distribution type dynamically based on formFields
         const form = document.getElementById("dataForm");
-
+    
         Object.keys(formFields).forEach(fieldId => {
             const field = formFields[fieldId];
+            
+            // Create details element for collapsible functionality
+            const details = document.createElement("details");
+            details.className = "form-section";
+            // Open by default if needed
+            // details.open = true;
+            
+            // Create summary element (clickable header)
+            const summary = document.createElement("summary");
+            summary.className = "form-section-header";
+            
+            // Add heading inside summary
+            const heading = document.createElement("h4");
+            heading.textContent = fieldId;
+            heading.style.display = "inline"; // Keep heading inline with disclosure triangle
+            summary.appendChild(heading);
+            
+            // Create container for the form fields
             const fieldWrapper = document.createElement("div");
             fieldWrapper.id = `wrapper-${fieldId}`;
-            form.appendChild(fieldWrapper);
-
-            // Add a static header with the field's id name, only once
-            const heading = document.createElement("h4");
-            heading.textContent = `${fieldId}`;
-            fieldWrapper.appendChild(heading);
-
-            // Create and add the distribution dropdown
+            fieldWrapper.className = "form-section-content";
+            
+            // Add the distribution dropdown section
             const label = document.createElement("label");
             label.for = `${fieldId}-distribution`;
             label.textContent = `Distribution: `;
             fieldWrapper.appendChild(label);
-
+    
             const select = document.createElement("select");
             select.id = `${fieldId}-distribution`;
             select.name = `${fieldId}-distribution`;
-
-            // Create options for the dropdown based on available distributions
+    
+            // Create options for the dropdown
             formFields[fieldId].constraints.allowed_dists.forEach(dist => {
                 const option = document.createElement("option");
                 option.value = dist;
                 option.textContent = dist;
-                option.selected = dist === field.default.distribution; // Set selected value from default
+                option.selected = dist === field.default.distribution;
                 select.appendChild(option);
             });
             fieldWrapper.appendChild(select);
-
-            // Create a container for dynamic fields below the dropdown
+    
+            // Create container for dynamic fields
             const dynamicFieldsContainer = document.createElement("div");
             dynamicFieldsContainer.id = `dynamic-${fieldId}`;
             fieldWrapper.appendChild(dynamicFieldsContainer);
-
-            // Create fields based on the default distribution type
+    
+            // Assemble the collapsible section
+            details.appendChild(summary);
+            details.appendChild(fieldWrapper);
+            form.appendChild(details);
+    
+            // Create initial fields based on default distribution
             createDistributionFields(fieldId, field.default.distribution, field.default, dynamicFieldsContainer);
-
-            // Update fields dynamically based on selected distribution
-            select.addEventListener("change", function () {
+    
+            // Update fields when distribution changes
+            select.addEventListener("change", function() {
                 const selectedDist = select.value;
                 createDistributionFields(fieldId, selectedDist, field.default, dynamicFieldsContainer);
             });
