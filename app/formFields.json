@@ -145,7 +145,7 @@
 		}		
 	},
 	"NUM_QUOTES" : {
-		"common name" : "Number of quotes requested per round",
+		"common name" : "Quotes requested per round",
 		"description" : "Distribution of the number of insurance quotes a defender will seek each round",
 		"default": {
 			"distribution" : "truncated_normal",
@@ -199,7 +199,7 @@
 		}		
 	},
 	"NUM_DEFENDERS" : {
-		"common name" : "Number of defenders",
+		"common name" : "Initial number of defenders",
 		"description" : "Number of Defender agents initialized at the start of simulation",
 		"default": {
 			"distribution" : "fixed",
@@ -217,7 +217,7 @@
 		}		
 	},
 	"NUM_INSURERS" : {
-		"common name" : "Number of insurers",
+		"common name" : "Initial number of insurers",
 		"description" : "Number of Insurer agents initialized at the start of simulation",
 		"default": {
 			"distribution" : "fixed",
@@ -235,7 +235,7 @@
 		}		
 	},
 	"NUM_ATTACKERS" : {
-		"common name" : "Number of attackers",
+		"common name" : "Initial number of attackers",
 		"description" : "Number of Attacker agents initialized at the start of simulation",
 		"default": {
 			"distribution" : "fixed",
@@ -289,7 +289,7 @@
 		}		
 	},
 	"DEPRECIATION" : {
-		"common name" : "CapEx Depreciation",
+		"common name" : "CapEx depreciation",
 		"description" : "Depreciation rate for capital expenditures allocated for security",
 		"default": {
 			"distribution" : "fixed",
@@ -307,7 +307,7 @@
 		}		
 	},
 	"INVESTMENT_SCALING_FACTOR" : {
-		"common name" : "Security Investment Scaling Factor",
+		"common name" : "Security investment scaling factor",
 		"description" : "Scaling factor for calculating security posture given investment x: posture = erf( S * x)",
 		"default": {
 			"distribution" : "fixed",
@@ -325,7 +325,7 @@
 		}		
 	},
 	"MANDATORY_INVESTMENT" : {
-		"common name" : "Mandatory Investment",
+		"common name" : "Mandatory investment",
 		"description" : "Percentage of defender assets that must be spent on security each round",
 		"default": {
 			"distribution" : "fixed",

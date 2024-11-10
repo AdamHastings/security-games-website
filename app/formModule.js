@@ -29,7 +29,7 @@ define(["text!formFields.json"], function (formFieldsData) {
             
             // Add heading inside summary
             const heading = document.createElement("h4");
-            heading.textContent = fieldId;
+            heading.textContent = formFields[fieldId]['common name'];
             heading.style.display = "inline"; // Keep heading inline with disclosure triangle
             summary.appendChild(heading);
             
@@ -37,13 +37,17 @@ define(["text!formFields.json"], function (formFieldsData) {
             const fieldWrapper = document.createElement("div");
             fieldWrapper.id = `wrapper-${fieldId}`;
             fieldWrapper.className = "form-section-content";
+
+            const description = document.createElement("p");
+            description.textContent = formFields[fieldId]['description'];
+            fieldWrapper.appendChild(description);
             
             // Add the distribution dropdown section
             const label = document.createElement("label");
             label.for = `${fieldId}-distribution`;
             label.textContent = `Distribution: `;
             fieldWrapper.appendChild(label);
-    
+
             const select = document.createElement("select");
             select.id = `${fieldId}-distribution`;
             select.name = `${fieldId}-distribution`;
