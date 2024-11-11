@@ -1,7 +1,7 @@
 {
 	"MANDATORY_INVESTMENT" : {
 		"common name" : "Mandatory investment",
-		"description" : "If Percentage of defender assets that must be spent on security each round",
+		"description" : "This parameter determines the percentage of wealth (assets) that each defender must invest into security at the start of each round",
 		"default": {
 			"distribution" : "fixed",
 			"val" : 0,
