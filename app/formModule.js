@@ -267,7 +267,7 @@ define(["text!formFields.json"], function (formFieldsData) {
         .then(response => response.json())  // Parse JSON response
         .then(data => {
             // Get the iframe element
-            var iframe = document.getElementById('iframe-generated');
+            var iframe = document.getElementById('iframe-sankey');
             
             // Inject the HTML content into the iframe using srcdoc
             iframe.srcdoc = data.sankeyhtml;  

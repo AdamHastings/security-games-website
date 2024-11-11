@@ -14,14 +14,19 @@
     </p>
     <form id="dataForm"></form>
     <br>
-    <button type="submit" id="submitBtn">Run</button>
-    <button type="button" id="resetButton">Reset</button>
+    <div class="button-container">
+        <button type="submit" id="submitBtn">Run</button>
+        <button type="button" id="resetButton">Reset</button>
+    </div>
 
     <h1>Results</h1>
     <!--  <button onclick="document.getElementById('iframe-generated').src='process_input.php'">Load Generated HTML</button> -->
 
     <!-- The iframe will display the generated HTML -->
-    <iframe id="iframe-generated"></iframe>
+    <iframe id="iframe-sankey"></iframe>
+    <iframe id="iframe-cumulative"></iframe>
+    <iframe id="iframe-choices"></iframe>
+    <iframe id="iframe-canaries"></iframe>
 
 
     <script src="require.js"></script>

@@ -33,6 +33,14 @@ button {
     margin-right: 1rem;
 }
 
+/* Add this to your CSS file */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;  /* This creates space between the buttons */
+    margin: 2rem 0;  /* Adds some vertical spacing */
+}
+
 button:hover {
     background-color: #2563eb;
     transform: translateY(-1px);
@@ -51,18 +59,14 @@ button:active {
     background-color: #475569;
 }
 
-/* IFrame styling */
-#iframe-generated {
+iframe {
     border: 1px solid #e2e8f0;
     border-radius: 8px;
     background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     margin-top: 1rem;
-}
-
-/* Space between form and buttons */
-#dataForm {
-    margin-bottom: 2rem;
+    width: 800px;
+    height: 400px;
 }
 
 /* Responsive adjustments */
@@ -84,7 +88,7 @@ button:active {
         margin-right: 0;
     }
 
-    #iframe-generated {
+    iframe {
         width: 100% !important;
         height: 300px !important;
     }
@@ -177,8 +181,9 @@ label {
 select,
 input[type="text"],
 input[type="number"] {
+    box-sizing: border-box;
     width: 100%;
-    max-width: 300px;
+    max-width: 200px;
     padding: 0.5rem;
     border: 1px solid #cbd5e1;
     border-radius: 6px;
