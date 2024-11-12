@@ -8,11 +8,15 @@ RUN apt-get update && apt-get install -y \
     python3-numpy \
     python3-pandas \
     python3-plotly \
+    python3-matplotlib \
+    # python3-matplotx \
     libgsl-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 ENV LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
+
+RUN pip install matplotx[all] --break-system-packages
 
 # Copy PHP scripts and binaries into the appropriate directories in the container
 COPY app/ /var/www/html/

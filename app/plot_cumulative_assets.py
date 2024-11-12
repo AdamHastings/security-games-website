@@ -13,7 +13,7 @@ def trillion_formatter(x, pos):
     return "$%.0fT" % (x / 1E12)
 
 
-def plot_cumulative_assets(df):    
+def plot_cumulative_assets(df, outfile):    
 
     df['d_cumulative_assets'] = df['d_cumulative_assets'].apply(lambda x: np.fromstring(x.replace('[','').replace(']',''), dtype=int, sep=','))
     df['a_cumulative_assets'] = df['a_cumulative_assets'].apply(lambda x: np.fromstring(x.replace('[','').replace(']',''), dtype=int, sep=','))
@@ -39,32 +39,6 @@ def plot_cumulative_assets(df):
 
             for i in range(len(df[frame])):
                 plt.plot(df[frame][i], color=c, label=label, alpha=0.05)
-
-
-            # cumulative_assets_5th_pct = []
-            # cumulative_assets_median = []
-            # cumulative_assets_95th_pct = []
-
-            # # consider shortest run instead?
-            # # or perhaps even median run?
-            # length = int(df[frame].map(lambda x : len(x)).median())
-
-
-            # for i in range(length):
-            #     col = [x[i] for x in df[frame] if i < len(x)]
-
-            #     cumulative_assets_5th_pct.append(np.percentile(col, 5))
-            #     cumulative_assets_median.append(np.percentile(col, 50))
-            #     cumulative_assets_95th_pct.append(np.percentile(col, 95))
-
-            # x = range(length)
-            
-
-
-            # plt.fill_between(x, cumulative_assets_5th_pct, cumulative_assets_95th_pct, color=c, alpha=0.5, edgecolor='none')
-            # plt.plot(cumulative_assets_median, color=c, label=label, linestyle=l)
-
-
         
 
         plt.ylabel("cumulative wealth")
@@ -81,22 +55,18 @@ def plot_cumulative_assets(df):
         plt.legend(custom_handles, ['Defenders', 'Attackers', 'Insurers'], loc='upper left', framealpha=1.0)
         # ax.set_xticks(np.arange(0,5000,1000))
 
-        basetitle = "cumulative_assets"
-        dirname = "figures"
-        subdirname = df['folder'][0]
-        path = dirname + '/' + subdirname 
+        # basetitle = "cumulative_assets"
+        # dirname = "figures"
+        # subdirname = df['folder'][0]
+        # path = dirname + '/' + subdirname 
         
-        if not os.path.isdir(path):
-            os.mkdir(path)
 
         plt.gca().xaxis.grid(True)
         plt.tight_layout()
 
         plt.axhline(1 * 10**11, 0, 3000)
 
-        # plt.show()
-        plt.savefig(path + '/' + basetitle + '.png')
-        plt.savefig(path + '/' + basetitle + '.pdf')
+        plt.savefig(outfile)
 
 
 
@@ -110,8 +80,9 @@ if __name__=="__main__":
         sys.exit(1)
 
     df = pd.read_csv(filename, header=0)
-    filename = filename.replace("../logs/", "")
+    filename = filename.replace("logs/", "")
     filename = filename.replace(".csv", "")
-    df['folder'] = filename
+    outfile = 'figs/' + filename + '_cumulative_assets.png'
 
-    plot_cumulative_assets(df)
+
+    plot_cumulative_assets(df, outfile)

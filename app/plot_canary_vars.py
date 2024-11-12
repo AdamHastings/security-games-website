@@ -1,5 +1,8 @@
-# import matplotlib.pyplot as plt
-# import matplotx
+#!/usr/bin/python3
+
+
+import matplotlib.pyplot as plt
+import matplotx
 import plotly.express as px
 import numpy as np
 import pandas as pd
@@ -18,7 +21,7 @@ g = '#00CC96'
 k = '#000000'
 
 
-def plot_p_attacks(df):
+def plot_p_attacks(df, outfile):
 
 
     df['p_pairing']                       = df['p_pairing'].apply(lambda x: np.fromstring(x.replace('[','').replace(']',''), dtype=float, sep=','))
@@ -30,7 +33,7 @@ def plot_p_attacks(df):
 
 
     # plot p_parings/p_attacks
-    # plt.clf()
+    plt.clf()
 
     attack_ps = [
         ('p_pairing', '% paired', g, '-'),
@@ -41,44 +44,43 @@ def plot_p_attacks(df):
         ('cumulative_defender_avg_posture', 'average\nsecurity\nposture', '#0000FF', '-')
     ]
 
-    # with plt.style.context(matplotx.styles.dufte):
-    # plt.figure(figsize=(6,4))
-    for key, label, color, linestyle in attack_ps:
+    with plt.style.context(matplotx.styles.dufte):
+        plt.figure(figsize=(6,4))
+        for key, label, color, linestyle in attack_ps:
 
-        length = int(df[key].map(lambda x : len(x)).median())
+            length = int(df[key].map(lambda x : len(x)).median())
 
-        means = np.empty([length])
-        fifthpct = np.empty([length])
-        ninetyfifthpct = np.empty([length])
-        for i in range(length):
-            col = np.array([x[i] for x in df[key] if i < len(x)])
-            means[i] = col.mean()
-            fifthpct[i] = np.percentile(col, 5)
-            ninetyfifthpct[i] = np.percentile(col, 95)
+            means = np.empty([length])
+            fifthpct = np.empty([length])
+            ninetyfifthpct = np.empty([length])
+            for i in range(length):
+                col = np.array([x[i] for x in df[key] if i < len(x)])
+                means[i] = col.mean()
+                fifthpct[i] = np.percentile(col, 5)
+                ninetyfifthpct[i] = np.percentile(col, 95)
 
-        # print(label, means)
+            # print(label, means)
 
-        x = np.arange(length)
-        # too confusing to look at 
-        # plt.fill_between(x, fifthpct, ninetyfifthpct, color=color, alpha=0.5, edgecolor='none')
-        # fig = px.line(x, means, label=label, color=color, linestyle=linestyle)
-        fig = px.line(x=x, y=means)
+            x = np.arange(length)
+            # too confusing to look at 
+            # plt.fill_between(x, fifthpct, ninetyfifthpct, color=color, alpha=0.5, edgecolor='none')
+            plt.plot(x, means, label=label, color=color, linestyle=linestyle)
 
-        # plt.xlabel("timestep")
-        # matplotx.ylabel_top("")  # move ylabel to the top, rotate
-        # matplotx.line_labels()  # line labels to the right
+        plt.xlabel("timestep")
+        matplotx.ylabel_top("")  # move ylabel to the top, rotate
+        matplotx.line_labels()  # line labels to the right
         # plt.xlim(0, 300)
-        # plt.ylim(0, 1.0)
+        plt.ylim(0, 1.0)
         # fig.set_size_inches(7,3.5)
         # plt.figure(figsize=(7,3))
-        # plt.gca().xaxis.grid(True)
-        # plt.tight_layout()
+        plt.gca().xaxis.grid(True)
+        plt.tight_layout()
         # plt.show()
 
         basetitle = 'canary_vars_p_attack'
-        dirname = 'figures'
-        subdirname = df['folder'][0]
-        path = dirname + '/' + subdirname 
+        # dirname = 'figures'
+        # subdirname = df['folder'][0]
+        # path = dirname + '/' + subdirname 
         # plt.set_xticks(np.arange(0,5000,1000))
         # plt.xticks(np.arange(0,4000,1000))
         
@@ -87,9 +89,8 @@ def plot_p_attacks(df):
 
         # plt.show() # uncomment for zoom in
 
-        # plt.savefig(path + '/' + basetitle + '.png')
+        plt.savefig(outfile)
         # plt.savefig(path + '/' + basetitle + '.pdf')
-        fig.write_html(basetitle + '.html')
         
 
 
@@ -105,9 +106,10 @@ if __name__=="__main__":
         sys.exit(1)
 
     df = pd.read_csv(filename, header=0)
-    filename = filename.replace("../logs/", "")
+    filename = filename.replace("logs/", "")
     filename = filename.replace(".csv", "")
     df['folder'] = filename
 
-    plot_p_attacks(copy.deepcopy(df))
+    outfile = 'figs/' + filename + '_canary_vars.png'
+    plot_p_attacks(df, outfile)
     # plot_canary_vars(copy.deepcopy(df))
