@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FuncFormatter
 import sys
 import os
 import os.path
@@ -12,22 +13,8 @@ import matplotx
 # def trillion_formatter(x, pos):
 #     return "$%.0fT" % (x / 1E12)
 
-# def dollar_scientific_formatter(y, pos):
-#     """
-#     Custom tick formatter for Matplotlib that displays y-axis ticks in dollar
-#     amounts using scientific notation.
-    
-#     Parameters:
-#     y (float): The value to be formatted.
-#     pos (int): The tick position.
-    
-#     Returns:
-#     str: The formatted tick label.
-#     """
-#     if y == 0:
-#         return '$0'
-#     else:
-#         return '${:1.2e}'.format(y)
+def dollar_formatter(x, pos):
+    return f"${x:.0e}"
 
 
 def plot_cumulative_assets(df, outfile):    
@@ -46,8 +33,9 @@ def plot_cumulative_assets(df, outfile):
         # plt.figure(figsize=(4,3))
         fig.set_size_inches(5.5,3.5)
         # ax.yaxis.set_major_formatter(trillion_formatter)
-        plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
+        # plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
         # ax.yaxis.set_major_formatter(mtick.FuncFormatter(dollar_scientific_formatter))
+        ax.yaxis.set_major_formatter(FuncFormatter(dollar_formatter))
 
 
 
