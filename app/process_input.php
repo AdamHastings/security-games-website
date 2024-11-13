@@ -78,9 +78,14 @@ if (file_exists($sankey_filename)) {
 // unlink($sankey_filename);
 
 // // Get your image and convert to base64
-$imagePath = 'figs/apple.png';
-$base64Image = base64_encode(file_get_contents($imagePath));
+// $imagePath = 'figs/apple.png';
+// $base64Image = base64_encode(file_get_contents($imagePath));
 
+
+// $base64ImageChoices = base64_encode(file_get_contents($choices_filename));
+// if (file_exists($choices_filename) {
+//     $choicesImage = base64
+// })
 
 
 
@@ -95,8 +100,8 @@ $response = array(
     "sankey_filename" => $sankey_filename,
     "command" => $command,
     "written_contents" => $written_contents,
-    'imagePath' => $imagePath,
-    'base64Image' => $base64Image
+    'choices_filename' => $choices_filename,
+    'canary_filename' => $canary_filename
 );
 echo json_encode($response);
 ?> 

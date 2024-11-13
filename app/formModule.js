@@ -281,25 +281,35 @@ define(["text!formFields.json"], function (formFieldsData) {
 
             var cumulative_iframe = document.getElementById('iframe-cumulative');
 
-            // fixed quotation mark
-            const htmlContent = `
+            const canaryhtml = `
             <html>
                 <body style="margin:0; padding:0;">
-                <img src=figs/apple.png style="width:100%; height:100%; object-fit:contain;">
+                <img src=${data.canary_filename} style="width:100%; height:100%; object-fit:contain;">
+                </body>
+            </html>
+            `;
+            var canaries_iframe = document.getElementById('iframe-canaries');
+            canaries_iframe.srcdoc = canaryhtml;
+
+
+            // cumulative_iframe.srcdoc = htmlContent;
+
+            // console.log(htmlContent);
+            // console.log(data.base64Image);
+
+            const choiceshtml = `
+            <html>
+                <body style="margin:0; padding:0;">
+                <img src=${data.choices_filename} style="width:100%; height:100%; object-fit:contain;">
                 </body>
             </html>
             `;
 
-            cumulative_iframe.srcdoc = htmlContent;
 
-            console.log(htmlContent);
-            console.log(data.base64Image);
+            var choices_iframe = document.getElementById('iframe-choices');
+            choices_iframe.srcdoc = choiceshtml;
 
-
-            // var choices_iframe = document.getElementById('iframe-choices');
-            // var canaries_iframe = document.getElementById('iframe-canaries');
-
-            
+            console.log(data.choices_filename);
 
         })
         .catch(error => {
