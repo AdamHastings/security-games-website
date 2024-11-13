@@ -16,7 +16,7 @@ r = '#EF553B'
 
 def choices(df, outfile):
 
-    plt.figure(figsize=(6,2.75))
+    plt.figure(figsize=(5.5, 3.5))
     # TODO remove deepcopy, do this in run_all?
     df['cumulative_round_policies_purchased'] = df['cumulative_round_policies_purchased'].apply(lambda x: np.fromstring(x.replace('[','').replace(']',''), dtype=int, sep=','))
     df['cumulative_round_defenses_purchased'] = df['cumulative_round_defenses_purchased'].apply(lambda x: np.fromstring(x.replace('[','').replace(']',''), dtype=int, sep=','))
@@ -78,7 +78,11 @@ def choices(df, outfile):
         for stack, hatch in zip(stacks, hatches):
             stack.set_hatch(hatch)
 
-        plt.legend(framealpha=1.0)
+        # plt.legend(framealpha=1.0)
+
+        l4 = plt.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
+                mode="expand", borderaxespad=0, ncol=3, prop={'size': 10})
+
         plt.xlabel("timestep")
         plt.ylabel("count")
         plt.gca().xaxis.grid(True)
@@ -92,7 +96,7 @@ def choices(df, outfile):
         # if not os.path.isdir(path):
         #     os.mkdir(path)
 
-        plt.savefig(outfile)
+        plt.savefig(outfile, dpi=300)
         # plt.savefig(path + '/' + basetitle + '.pdf')
 
         # plt.clf()
