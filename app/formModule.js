@@ -279,6 +279,28 @@ define(["text!formFields.json"], function (formFieldsData) {
             ////
             console.log(data.written_contents);
 
+            var cumulative_iframe = document.getElementById('iframe-cumulative');
+
+            // fixed quotation mark
+            const htmlContent = `
+            <html>
+                <body style="margin:0; padding:0;">
+                <img src=figs/apple.png style="width:100%; height:100%; object-fit:contain;">
+                </body>
+            </html>
+            `;
+
+            cumulative_iframe.srcdoc = htmlContent;
+            // cumulative_iframe.srcdoc = data.htmlContent;
+
+            console.log(htmlContent);
+
+
+            // var choices_iframe = document.getElementById('iframe-choices');
+            // var canaries_iframe = document.getElementById('iframe-canaries');
+
+            
+
         })
         .catch(error => {
             console.error('Error:', error);  // Handle errors

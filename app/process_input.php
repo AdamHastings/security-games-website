@@ -25,22 +25,9 @@ if ($indata) {
 $written_contents = file_get_contents($config_filename);
 
 
-// $config_filename = 'configs/server_config.json';
-
-
-
-
-// The ELF file or command you want to run
+// Run the simulation program
 $elf_file = './run/release/run_games';
-
-
-
 $command = "echo \"y\" | $elf_file $config_filename";
-
-// // echo $timestamp."<br>\n";
-// // echo $command."<br>\n";
-
-// // Execute the command using exec()
 $return_var = null;
 exec($command, $return_var);
 
@@ -53,10 +40,7 @@ exec($command, $return_var);
 
 // // create the plotly figures
 $logname = "logs/data_$timestamp.csv";
-// //TODO erase
-// $logname = "logs/server_config.csv";
 
-// chmod($logname, 0644);
 
 $script_command = "./asset_flow_sankey.py $logname";
 exec($script_command);
@@ -89,6 +73,11 @@ if (file_exists($sankey_filename)) {
 // unlink($logname);
 // unlink($sankey_filename);
 
+// // Get your image and convert to base64
+$imagePath = 'figs/apple.png';
+$base64Image = base64_encode(file_get_contents($imagePath));
+
+
 
 
 // echo json_encode($response);
@@ -101,7 +90,9 @@ $response = array(
     "config_filename" => $config_filename,
     "sankey_filename" => $sankey_filename,
     "command" => $command,
-    "written_contents" => $written_contents
+    "written_contents" => $written_contents,
+    'imagePath' => $imagePath,
+    'base64Image' => $base64Image
 );
 echo json_encode($response);
 ?> 

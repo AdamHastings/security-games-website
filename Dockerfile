@@ -9,7 +9,6 @@ RUN apt-get update && apt-get install -y \
     python3-pandas \
     python3-plotly \
     python3-matplotlib \
-    # python3-matplotx \
     libgsl-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
