@@ -234,6 +234,10 @@ define(["text!formFields.json"], function (formFieldsData) {
 
     // Collect form data and submit
     document.getElementById("submitBtn").addEventListener("click", function (e) {
+
+        document.getElementById("submitBtn").innerHTML = "Running...";
+        document.getElementById("submitBtn").style.backgroundColor = "#2563eb";
+
         e.preventDefault();
         const formData = {};
         Object.keys(formFields).forEach(field => {
@@ -313,6 +317,8 @@ define(["text!formFields.json"], function (formFieldsData) {
             var choices_iframe = document.getElementById('iframe-choices');
             choices_iframe.srcdoc = choiceshtml;
 
+            document.getElementById("submitBtn").innerHTML = "Run";
+            document.getElementById("submitBtn").style.backgroundColor = "#3b82f6";
         })
         .catch(error => {
             console.error('Error:', error);  // Handle errors
