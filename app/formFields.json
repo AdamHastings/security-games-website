@@ -108,7 +108,7 @@
 		}
 	},
 	"RANSOM_B1" : {
-		"common name" : "Ransom cost function paramter B0",
+		"common name" : "Ransom cost function paramter B1",
 		"description" : "Parameter for determining ransom prices. Ransom = B0 + B1 * wealth",
 		"default": {		
 			"distribution" : "fixed",
@@ -290,7 +290,7 @@
 	},
 	"CTA_SCALING_FACTOR" : {
 		"common name" : "Attack cost scaling factor",
-		"description" : "A scaling factor in determining the amount an attacker must wager to attempt an attack on a given defender, given by wager = cta * wealth * posture",
+		"description" : "A scaling factor in determining the amount an attacker must wager to attempt an attack on a given defender, given by wager = attack cost scaling factor * wealth * security posture",
 		"default": {
 			"distribution" : "fixed",
 			"val" : 0.857,
@@ -326,7 +326,7 @@
 	},
 	"INVESTMENT_SCALING_FACTOR" : {
 		"common name" : "Security investment scaling factor",
-		"description" : "Scaling factor for calculating security posture given investment x: posture = erf( S * x)",
+		"description" : "Scaling factor for calculating security posture given investment x. This parameter is provisioned such that average real-world investments produce average real-world security posture. A higher investment scaling factor increases the effectivness of a security investment.",
 		"default": {
 			"distribution" : "fixed",
 			"val" : 25,

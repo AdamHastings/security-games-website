@@ -31,12 +31,12 @@ $command = "echo \"y\" | $elf_file $config_filename";
 $return_var = null;
 exec($command, $return_var);
 
-// // Check the result
-// // if ($return_var === 0) {
-// //     echo "Command executed successfully.<br>";
-// // } else {
-// //     echo "Error executing the command. Return code: " . $return_var."<br>";
-// // }
+// Check the result
+// if ($return_var === 0) {
+//     echo "Command executed successfully.<br>";
+// } else {
+//     echo "Error executing the command. Return code: " . $return_var."<br>";
+// }
 
 // // create the plotly figures
 $logname = "logs/data_$timestamp.csv";
@@ -44,19 +44,23 @@ $logname = "logs/data_$timestamp.csv";
 
 $script_command = "./asset_flow_sankey.py $logname";
 exec($script_command);
-
-
 $sankey_filename = "figs/data_" . $timestamp . "_asset_flow_sankey.html";
-
-// $sankey_filename = "figs/server_config_asset_flow_sankey.html";
-
 chmod($sankey_filename, 0644);
 
+$canary_command = "./plot_canary_vars.py $logname";
+exec($canary_command);
+$canary_filename = "figs/data_" . $timestamp . "_canary_vars.png";
+chmod($canary_filename, 0644);
 
+$choices_command = "./choices.py $logname";
+exec($choices_command);
+$choices_filename = "figs/data_" . $timestamp . "_choices.png";
+chmod($choices_filename, 0644);
 
-// // echo $sankey_filename."<br>\n";
-
-// $response = $response . $sankey_filename;
+// $cumulative_command = "./plot_cumulative_assets.py $logname";
+// exec($cumulative_command);
+// $cumulative_filename = "figs/data_" . $timestamp . "_plot_cumulative_assets.png";
+// chmod($cumulative_filename, 0644);
 
 
 

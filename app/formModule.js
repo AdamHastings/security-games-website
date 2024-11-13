@@ -291,9 +291,9 @@ define(["text!formFields.json"], function (formFieldsData) {
             `;
 
             cumulative_iframe.srcdoc = htmlContent;
-            // cumulative_iframe.srcdoc = data.htmlContent;
 
             console.log(htmlContent);
+            console.log(data.base64Image);
 
 
             // var choices_iframe = document.getElementById('iframe-choices');
