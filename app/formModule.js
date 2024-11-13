@@ -221,6 +221,10 @@ define(["text!formFields.json"], function (formFieldsData) {
             const dynamicFieldsContainer = document.getElementById(`dynamic-${fieldID}`);
             createDistributionFields(fieldID, field.default.distribution, field.default, dynamicFieldsContainer);         
         });
+        document.getElementById('iframe-cumulative').srcdoc = "";
+        document.getElementById('iframe-choices').srcdoc = "";
+        document.getElementById('iframe-canaries').srcdoc = "";
+        document.getElementById('iframe-sankey').srcdoc = "";
     }
 
     createForm();
