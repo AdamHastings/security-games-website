@@ -9,8 +9,25 @@ from matplotlib.lines import Line2D
 import matplotx
 
 
-def trillion_formatter(x, pos):
-    return "$%.0fT" % (x / 1E12)
+# def trillion_formatter(x, pos):
+#     return "$%.0fT" % (x / 1E12)
+
+# def dollar_scientific_formatter(y, pos):
+#     """
+#     Custom tick formatter for Matplotlib that displays y-axis ticks in dollar
+#     amounts using scientific notation.
+    
+#     Parameters:
+#     y (float): The value to be formatted.
+#     pos (int): The tick position.
+    
+#     Returns:
+#     str: The formatted tick label.
+#     """
+#     if y == 0:
+#         return '$0'
+#     else:
+#         return '${:1.2e}'.format(y)
 
 
 def plot_cumulative_assets(df, outfile):    
@@ -27,8 +44,12 @@ def plot_cumulative_assets(df, outfile):
         # plt.figure(figsize=(7,2))
         fig, ax = plt.subplots()
         # plt.figure(figsize=(4,3))
-        fig.set_size_inches(5,3.5)
-        ax.yaxis.set_major_formatter(trillion_formatter)
+        fig.set_size_inches(5.5,3.5)
+        # ax.yaxis.set_major_formatter(trillion_formatter)
+        plt.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
+        # ax.yaxis.set_major_formatter(mtick.FuncFormatter(dollar_scientific_formatter))
+
+
 
         df.final_iter = df.final_iter.astype(int)
 
@@ -38,7 +59,7 @@ def plot_cumulative_assets(df, outfile):
             frame = label[0] + "_cumulative_assets"
 
             for i in range(len(df[frame])):
-                plt.plot(df[frame][i], color=c, label=label, alpha=0.05)
+                plt.plot(df[frame][i], color=c, label=label)
         
 
         plt.ylabel("cumulative wealth")
@@ -52,7 +73,11 @@ def plot_cumulative_assets(df, outfile):
         ]
 
         # Creating custom legend labels
-        plt.legend(custom_handles, ['Defenders', 'Attackers', 'Insurers'], loc='upper left', framealpha=1.0)
+        # plt.legend(custom_handles, ['Defenders', 'Attackers', 'Insurers'], loc='upper left', framealpha=1.0)
+
+        l4 = plt.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
+                mode="expand", borderaxespad=0, ncol=3, prop={'size': 10})
+
         # ax.set_xticks(np.arange(0,5000,1000))
 
         # basetitle = "cumulative_assets"
@@ -64,9 +89,9 @@ def plot_cumulative_assets(df, outfile):
         plt.gca().xaxis.grid(True)
         plt.tight_layout()
 
-        plt.axhline(1 * 10**11, 0, 3000)
+        # plt.axhline(1 * 10**11, 0, 3000)
 
-        plt.savefig(outfile)
+        plt.savefig(outfile, dpi=300)
 
 
 

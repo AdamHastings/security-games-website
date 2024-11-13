@@ -45,7 +45,7 @@ def plot_p_attacks(df, outfile):
     ]
 
     with plt.style.context(matplotx.styles.dufte):
-        plt.figure(figsize=(6,4))
+        plt.figure(figsize=(5.5,3.5))
         for key, label, color, linestyle in attack_ps:
 
             length = int(df[key].map(lambda x : len(x)).median())
@@ -67,7 +67,8 @@ def plot_p_attacks(df, outfile):
             plt.plot(x, means, label=label, color=color, linestyle=linestyle)
 
         plt.xlabel("timestep")
-        matplotx.ylabel_top("")  # move ylabel to the top, rotate
+        plt.ylabel("value")
+        # matplotx.ylabel_top("")  # move ylabel to the top, rotate
         matplotx.line_labels()  # line labels to the right
         # plt.xlim(0, 300)
         plt.ylim(0, 1.0)
@@ -89,7 +90,7 @@ def plot_p_attacks(df, outfile):
 
         # plt.show() # uncomment for zoom in
 
-        plt.savefig(outfile)
+        plt.savefig(outfile, dpi=300)
         # plt.savefig(path + '/' + basetitle + '.pdf')
         
 
