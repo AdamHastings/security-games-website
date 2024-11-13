@@ -27,7 +27,7 @@ def plot_cumulative_assets(df, outfile):
         # plt.figure(figsize=(7,2))
         fig, ax = plt.subplots()
         # plt.figure(figsize=(4,3))
-        fig.set_size_inches(5,3.5)
+        fig.set_size_inches(5.5,3.5)
         ax.yaxis.set_major_formatter(trillion_formatter)
 
         df.final_iter = df.final_iter.astype(int)
@@ -38,7 +38,7 @@ def plot_cumulative_assets(df, outfile):
             frame = label[0] + "_cumulative_assets"
 
             for i in range(len(df[frame])):
-                plt.plot(df[frame][i], color=c, label=label, alpha=0.05)
+                plt.plot(df[frame][i], color=c, label=label)
         
 
         plt.ylabel("cumulative wealth")
@@ -52,7 +52,11 @@ def plot_cumulative_assets(df, outfile):
         ]
 
         # Creating custom legend labels
-        plt.legend(custom_handles, ['Defenders', 'Attackers', 'Insurers'], loc='upper left', framealpha=1.0)
+        # plt.legend(custom_handles, ['Defenders', 'Attackers', 'Insurers'], loc='upper left', framealpha=1.0)
+
+        l4 = plt.legend(bbox_to_anchor=(0, 1.02, 1, 0.2), loc="lower left",
+                mode="expand", borderaxespad=0, ncol=3, prop={'size': 10})
+
         # ax.set_xticks(np.arange(0,5000,1000))
 
         # basetitle = "cumulative_assets"
@@ -64,9 +68,9 @@ def plot_cumulative_assets(df, outfile):
         plt.gca().xaxis.grid(True)
         plt.tight_layout()
 
-        plt.axhline(1 * 10**11, 0, 3000)
+        # plt.axhline(1 * 10**11, 0, 3000)
 
-        plt.savefig(outfile)
+        plt.savefig(outfile, dpi=300)
 
 
 

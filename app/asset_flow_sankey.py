@@ -278,7 +278,7 @@ def asset_flow_sankey(df, outfile):
   # fig.write_image(path + '/' + basetitle + '.pdf')
   # print("python saving to ", outfile)
   # sys.stderr.write("writing to ", outfile)
-  fig.write_html(outfile)
+  fig.write_html(outfile, dpi=600)
 
   
 
