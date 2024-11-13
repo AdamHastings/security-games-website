@@ -57,10 +57,10 @@ exec($choices_command);
 $choices_filename = "figs/data_" . $timestamp . "_choices.png";
 chmod($choices_filename, 0644);
 
-// $cumulative_command = "./plot_cumulative_assets.py $logname";
-// exec($cumulative_command);
-// $cumulative_filename = "figs/data_" . $timestamp . "_plot_cumulative_assets.png";
-// chmod($cumulative_filename, 0644);
+$cumulative_command = "./plot_cumulative_assets.py $logname";
+exec($cumulative_command);
+$cumulative_filename = "figs/data_" . $timestamp . "_cumulative_assets.png";
+chmod($cumulative_filename, 0644);
 
 
 
@@ -101,7 +101,8 @@ $response = array(
     "command" => $command,
     "written_contents" => $written_contents,
     'choices_filename' => $choices_filename,
-    'canary_filename' => $canary_filename
+    'canary_filename' => $canary_filename,
+    'cumulative_filename' => $cumulative_filename
 );
 echo json_encode($response);
 ?> 
